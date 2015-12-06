@@ -285,6 +285,30 @@ class WrapTests: XCTestCase {
         }
     }
     
+    func testRootDictionary() {
+        struct Model {
+            var string: String
+        }
+        
+        let dictionary = [
+            "model1" : Model(string: "First"),
+            "model2" : Model(string: "Second")
+        ]
+        
+        do {
+            try VerifyDictionary(Wrap(dictionary), againstDictionary: [
+                "model1" : [
+                    "string" : "First"
+                ],
+                "model2" : [
+                    "string" : "Second"
+                ]
+            ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+    
     func testNestedStruct() {
         struct NestedModel {
             let string = "Nested model"
