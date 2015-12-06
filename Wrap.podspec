@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
   s.name         = "Wrap"
   s.version      = "1.0"
-  s.summary      = "The easy to use Swift JSON encoder."
+  s.summary      = "The easy to use Swift JSON encoder"
   s.description  = <<-DESC
   Wrap is an easy to use Swift JSON encoder. Don't spend hours writing JSON encoding code - just wrap it instead!
 
-  Using Wrap is as easy as calling `Wrap()` on any instance of a Class or Struct that you wish to encode. It automatically encodes all of your type’s properties, including nested objects, collections, enums and more!
+  Using Wrap is as easy as calling Wrap() on any instance of a class or struct that you wish to encode. It automatically encodes all of your type’s properties, including nested objects, collections, enums and more!
   DESC
   s.homepage     = "https://github.com/JohnSundell/Wrap"
   s.license      = { :type => "MIT", :file => "LICENSE" }
