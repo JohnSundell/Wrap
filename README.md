@@ -18,7 +18,7 @@ struct User {
     let age: Int
 }
 
-let user = User(name: “John”, age: 28)
+let user = User(name: "John", age: 28)
 ```
 
 Using `Wrap()` you can now encode a `User` instance with one command:
@@ -72,14 +72,14 @@ let ship = SpaceShip(
     type: .Apollo,
     weight: 3999.72,
     engine: Engine(
-        manufacturer: “The Space Company”,
+        manufacturer: "The Space Company",
         fuelConsumption: 17.2321
     ),
     passengers: [
-        Astronaut(name: “Mike”),
-        Astronaut(name: “Amanda”)
+        Astronaut(name: "Mike"),
+        Astronaut(name: "Amanda")
     ],
-    launchLiveStreamURL: NSURL(string: “http://livestream.com”),
+    launchLiveStreamURL: NSURL(string: "http://livestream.com"),
     lastPilot: nil
 )
 ```
@@ -94,17 +94,17 @@ Which will produce the following dictionary:
 
 ```json
 {
-    “type”: 0,
-    “weight”: 3999.72,
-    “engine”: {
-        “manufacturer”: “The Space Company”,
-        “fuelConsumption”: 17.2321
+    "type": 0,
+    "weight": 3999.72,
+    "engine": {
+        "manufacturer": "The Space Company",
+        "fuelConsumption": 17.2321
     },
-    “passengers”: [
-        {“name”: “Mike”},
-        {“name”: “Amanda”}
+    "passengers": [
+        {"name": "Mike"},
+        {"name": "Amanda"}
     ],
-    “launchLiveStreamURL”: “http://livestream.com”
+    "launchLiveStreamURL": "http://livestream.com"
 }
 ```
 
@@ -124,8 +124,8 @@ struct Book: WrapCustomizable {
     let authorName: String
 
 		func keyForWrappingPropertyNamed(propertyName: String) -> String? {
-        if propertyName == “authorName” {
-            return “author_name”
+        if propertyName == "authorName" {
+            return "author_name"
         }
     }
 }
@@ -164,7 +164,7 @@ enum Profession {
 }
 
 struct Person {
-    let profession = Profession.Developer(favoriteLanguageName: “Swift”)
+    let profession = Profession.Developer(favoriteLanguageName: "Swift")
     let hobbyProfession = Profession.Lawyer
 }
 ```
@@ -173,10 +173,10 @@ Encodes into:
 
 ```json
 {
-    “profession”: {
-        “Developer”: “Swift”
+    "profession": {
+        "Developer": "Swift"
     },
-    “hobbyProfession”: “Lawyer”
+    "hobbyProfession": "Lawyer"
 }
 ```
 
@@ -184,11 +184,11 @@ Encodes into:
 
 **CocoaPods:**
 
-Add the line `pod “Wrap”` to your `Podfile`
+Add the line `pod "Wrap"` to your `Podfile`
 
-**Carthage:** 
+**Carthage:**
 
-Add the line `github "johnsundell/wrap”` to your `Cartfile`
+Add the line `github "johnsundell/wrap"` to your `Cartfile`
 
 **Manual:**
 
