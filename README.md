@@ -24,7 +24,7 @@ let user = User(name: "John", age: 28)
 Using `Wrap()` you can now encode a `User` instance with one command:
 
 ```swift
-let dictionary = try Wrap(user)
+let dictionary: [String : AnyObject] = try Wrap(user)
 ```
 
 Which will produce the following `Dictionary`:
@@ -87,7 +87,7 @@ let ship = SpaceShip(
 And now let’s encode it with one call to `Wrap()`:
 
 ```swift
-let dictionary = try Wrap(ship)
+let dictionary: WrappedDictionary = try Wrap(ship)
 ```
 
 Which will produce the following dictionary:
@@ -123,7 +123,7 @@ struct Book: WrapCustomizable {
     let title: String
     let authorName: String
 
-		func keyForWrappingPropertyNamed(propertyName: String) -> String? {
+    func keyForWrappingPropertyNamed(propertyName: String) -> String? {
         if propertyName == "authorName" {
             return "author_name"
         }
