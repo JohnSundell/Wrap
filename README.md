@@ -38,7 +38,7 @@ Which will produce the following `Dictionary`:
 
 ### Advanced example
 
-The first was a pretty simple example, but Wrap can encode even the most complicated structures for you, with both optional, non-optional and custom type values, all without any extra code on your part. Let’s say we have the following `struct`:
+The first was a pretty simple example, but Wrap can encode even the most complicated structures for you, with both optional, non-optional and custom type values, all without any extra code on your part. Let’s say we have the following model setup:
 
 ```swift
 struct SpaceShip {
@@ -65,7 +65,7 @@ struct Astronaut {
 }
 ```
 
-Let’s create an instance of it:
+Let’s create an instance of `SpaceShip`:
 
 ```swift
 let ship = SpaceShip(
@@ -108,11 +108,11 @@ Which will produce the following dictionary:
 }
 ```
 
-As you can see, Wrap automatically encoded our `NSURL` to its `absoluteString`, and ignored any properties that were `nil` (reducing the size of the produced JSON).
+As you can see, Wrap automatically encoded the `NSURL` property to its `absoluteString`, and ignored any properties that were `nil` (reducing the size of the produced JSON).
 
 ### Customization
 
-While automation is awesome, customization is just as important. Thankfully, Wrap provides several override points that enables you to tweak its default behavior.
+While automation is awesome, customization is just as important. Thankfully, Wrap provides several override points that enables you to easily tweak its default behavior.
 
 #### Customizing keys
 
@@ -127,6 +127,8 @@ struct Book: WrapCustomizable {
         if propertyName == "authorName" {
             return "author_name"
         }
+
+        return propertyName
     }
 }
 ```
@@ -135,7 +137,7 @@ You can also use the `keyForWrappingPropertyNamed()` API to skip a property enti
 
 #### Custom key types
 
-You might have nested dictionaries that are not keyed on `Strings`, and for these Wrap provides the `WrappableKey` protocol, to enable you to easily convert any type into a string that can be used as a JSON key.
+You might have nested dictionaries that are not keyed on `Strings`, and for those Wrap provides the `WrappableKey` protocol. This enables you to easily convert any type into a string that can be used as a JSON key.
 
 #### Customized wrapping
 
@@ -146,7 +148,7 @@ struct Library: WrapCustomizable {
     private let booksByID: [String : Book]
 
     func wrap() -> AnyObject? {
-        return self.booksByID
+        return Wrapper().wrap(self.booksByID)
     }
 }
 ```
