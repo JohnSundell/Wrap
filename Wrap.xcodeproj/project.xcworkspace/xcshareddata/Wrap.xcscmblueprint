@@ -1,0 +1,37 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "7AF96DB6EA6158C0309065EFFC712F3F9D7E1CC3",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "4AFBDBFC6ECFD44D86356D923EB7D5482033DE56" : 0,
+    "573FB9CF9FE3C683A50D019C577B4D3E13D8E944" : 0,
+    "7AF96DB6EA6158C0309065EFFC712F3F9D7E1CC3" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "221BCAC3-B6DD-4844-B9C1-DA17BA5345B9",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "4AFBDBFC6ECFD44D86356D923EB7D5482033DE56" : "..",
+    "573FB9CF9FE3C683A50D019C577B4D3E13D8E944" : "",
+    "7AF96DB6EA6158C0309065EFFC712F3F9D7E1CC3" : "Wrap\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Wrap",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Wrap.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/JohnSundell\/Apps.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4AFBDBFC6ECFD44D86356D923EB7D5482033DE56"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:JohnSundell\/SwiftKit.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "573FB9CF9FE3C683A50D019C577B4D3E13D8E944"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:JohnSundell\/Unbox.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "7AF96DB6EA6158C0309065EFFC712F3F9D7E1CC3"
+    }
+  ]
+}
