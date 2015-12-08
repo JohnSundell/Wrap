@@ -544,6 +544,31 @@ class WrapTests: XCTestCase {
         }
     }
     
+    func testCustomWrappingForSingleProperty() {
+        struct Model: WrapCustomizable {
+            let string = "Hello"
+            let int = 16
+            
+            private func wrapPropertyNamed(propertyName: String, withValue value: Any) -> AnyObject? {
+                if propertyName == "int" {
+                    XCTAssertEqual((value as? Int) ?? 0, self.int)
+                    return 27
+                }
+                
+                return nil
+            }
+        }
+        
+        do {
+            try VerifyDictionary(Wrap(Model()), againstDictionary: [
+                "string" : "Hello",
+                "int" : 27
+            ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+    
     func testCustomWrappingFailureThrows() {
         struct Model: WrapCustomizable {
             func wrap() -> AnyObject? {
