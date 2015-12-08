@@ -586,6 +586,25 @@ class WrapTests: XCTestCase {
         }
     }
     
+    func testCustomWrappingForSinglePropertyFailureThrows() {
+        struct Model: WrapCustomizable {
+            let string = "A string"
+            
+            private func wrapPropertyNamed(propertyName: String, withValue value: Any) throws -> AnyObject? {
+                throw NSError(domain: "ERROR", code: 0, userInfo: nil)
+            }
+        }
+        
+        do {
+            try Wrap(Model()) as WrappedDictionary
+            XCTFail("Should have thrown")
+        } catch WrapError.WrappingFailedForObject(let object) {
+            XCTAssertTrue(object is Model)
+        } catch {
+            XCTFail("Invalid error type: " + error.toString())
+        }
+    }
+    
     func testInvalidRootObjectThrows() {
         do {
             try Wrap("A string") as WrappedDictionary

@@ -109,8 +109,12 @@ public protocol WrapCustomizable {
      *  Returning nil from this method will cause Wrap to use the default
      *  wrapping mechanism for the property, so you can choose which properties
      *  you want to customize the wrapping for.
+     *
+     *  If you encounter an error while attempting to wrap the property in question,
+     *  you can choose to throw. This will cause a WrapError.WrappingFailedForObject
+     *  to be thrown from the main `Wrap()` call that started the process.
      */
-    func wrapPropertyNamed(propertyName: String, withValue value: Any) -> AnyObject?
+    func wrapPropertyNamed(propertyName: String, withValue value: Any) throws -> AnyObject?
 }
 
 /// Protocol implemented by types that may be used as keys in a wrapped Dictionary
@@ -165,8 +169,8 @@ public extension WrapCustomizable {
         return propertyName
     }
     
-    func wrapPropertyNamed(propertyName: String, withValue value: Any) -> AnyObject? {
-        return try? Wrapper().wrapValue(value, propertyName: propertyName)
+    func wrapPropertyNamed(propertyName: String, withValue value: Any) throws -> AnyObject? {
+        return try Wrapper().wrapValue(value, propertyName: propertyName)
     }
 }
 
@@ -347,7 +351,7 @@ private extension Wrapper {
                 }
                 
                 if let wrappingKey = wrappingKey {
-                    if let wrappedProperty = customizable?.wrapPropertyNamed(propertyName, withValue: property.value) {
+                    if let wrappedProperty = try customizable?.wrapPropertyNamed(propertyName, withValue: property.value) {
                         wrappedDictionary[wrappingKey] = wrappedProperty
                     } else {
                         wrappedDictionary[wrappingKey] = try self.wrapValue(property.value, propertyName: propertyName)
