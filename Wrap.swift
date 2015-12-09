@@ -69,8 +69,8 @@ public func Wrap<T>(object: T) throws -> WrappedDictionary {
 }
 
 /// Alternative `Wrap()` implementation that returns JSON-encoded NSData
-public func Wrap<T>(object: T) throws -> NSData {
-    return try Wrapper().wrap(object)
+public func Wrap<T>(object: T, writingOptions: NSJSONWritingOptions? = nil) throws -> NSData {
+    return try Wrapper().wrap(object, writingOptions: writingOptions ?? [])
 }
 
 /**
@@ -257,8 +257,8 @@ private extension Wrapper {
         return try self.performWrappingForObject(object, usingMirrors: mirrors.reverse())
     }
     
-    func wrap<T>(object: T) throws -> NSData {
-        return try NSJSONSerialization.dataWithJSONObject(self.wrap(object, enableCustomizedWrapping: true), options: [])
+    func wrap<T>(object: T, writingOptions: NSJSONWritingOptions) throws -> NSData {
+        return try NSJSONSerialization.dataWithJSONObject(self.wrap(object, enableCustomizedWrapping: true), options: writingOptions)
     }
     
     func wrapValue<T>(value: T, propertyName: String? = nil) throws -> AnyObject {
