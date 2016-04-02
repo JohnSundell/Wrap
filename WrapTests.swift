@@ -127,6 +127,26 @@ class WrapTests: XCTestCase {
         }
     }
     
+    func testDateProperty() {
+        let date = NSDate()
+        
+        struct Model {
+            let date: NSDate
+        }
+        
+        let dateFormatter = NSDateFormatter()
+        
+        do {
+            let model = Model(date: date)
+            
+            try VerifyDictionary(Wrap(model, dateFormatter: dateFormatter), againstDictionary: [
+                "date" : dateFormatter.stringFromDate(date)
+            ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+    
     func testEmptyStruct() {
         struct Empty {}
         

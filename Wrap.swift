@@ -33,6 +33,11 @@ public typealias WrappedDictionary = [String : AnyObject]
 /**
  *  Wrap any object or value, encoding it into a JSON compatible Dictionary
  *
+ *  - Parameter object: The object to encode
+ *  - Parameter dateFormatter: Optionally pass in a date formatter to use to encode any
+ *    `NSDate` values found while encoding the object. If this is `nil`, any found date
+ *    values will be encoded using the "yyyy-MM-dd HH:mm:ss" format.
+ *
  *  All the type's stored properties (both public & private) will be recursively
  *  encoded with their property names as the key. For example, given the following
  *  Struct as input:
@@ -64,13 +69,18 @@ public typealias WrappedDictionary = [String : AnyObject]
  *
  *  See also `WrappableKey` (for dictionary keys) and `WrappableEnum` for Enum values.
  */
-public func Wrap<T>(object: T) throws -> WrappedDictionary {
-    return try Wrapper().wrap(object, enableCustomizedWrapping: true)
+public func Wrap<T>(object: T, dateFormatter: NSDateFormatter? = nil) throws -> WrappedDictionary {
+    return try Wrapper(dateFormatter: dateFormatter).wrap(object, enableCustomizedWrapping: true)
 }
 
-/// Alternative `Wrap()` implementation that returns JSON-encoded NSData
-public func Wrap<T>(object: T, writingOptions: NSJSONWritingOptions? = nil) throws -> NSData {
-    return try Wrapper().wrap(object, writingOptions: writingOptions ?? [])
+/**
+ *  Alternative `Wrap()` implementation that returns JSON-encoded NSData
+ *
+ *  See the documentation for the dictionary-based `Wrap()` function for more information
+ *  and customization options.
+ */
+public func Wrap<T>(object: T, writingOptions: NSJSONWritingOptions? = nil, dateFormatter: NSDateFormatter? = nil) throws -> NSData {
+    return try Wrapper(dateFormatter: dateFormatter).wrap(object, writingOptions: writingOptions ?? [])
 }
 
 /**
@@ -140,8 +150,18 @@ public protocol WrappableEnum: WrapCustomizable {}
  *  to wrap an object from top-level code.
  */
 public class Wrapper {
-    /// Designated initializer
-    public init() {}
+    private var dateFormatter: NSDateFormatter?
+    
+    /**
+     *  Initialize an instance of this class, optionally with a date formatter
+     *
+     *  - Paramter dateFormatter: Any specific date formatter to use to encode any found `NSDate`
+     *  values. If this is `nil`, any found date values will be encoded using the "yyyy-MM-dd
+     *  HH:mm:ss" format.
+     */
+    public init(dateFormatter: NSDateFormatter? = nil) {
+        self.dateFormatter = dateFormatter
+    }
     
     /// Perform automatic wrapping of an object or value. For more information, see `Wrap()`.
     public func wrap(object: Any) throws -> WrappedDictionary {
@@ -258,7 +278,8 @@ private extension Wrapper {
     }
     
     func wrap<T>(object: T, writingOptions: NSJSONWritingOptions) throws -> NSData {
-        return try NSJSONSerialization.dataWithJSONObject(self.wrap(object, enableCustomizedWrapping: true), options: writingOptions)
+        let dictionary = try self.wrap(object, enableCustomizedWrapping: true)
+        return try NSJSONSerialization.dataWithJSONObject(dictionary, options: writingOptions)
     }
     
     func wrapValue<T>(value: T, propertyName: String? = nil) throws -> AnyObject {
@@ -279,6 +300,8 @@ private extension Wrapper {
                 }
                 
                 return self.verifyWrappedValue("\(value)", propertyName: propertyName)
+            } else if let date = value as? NSDate {
+                return self.wrapDate(date)
             }
             
             return self.verifyWrappedValue(value, propertyName: propertyName)
@@ -326,6 +349,20 @@ private extension Wrapper {
         }
         
         return wrappedDictionary
+    }
+    
+    func wrapDate(date: NSDate) -> String {
+        let dateFormatter: NSDateFormatter
+        
+        if let existingFormatter = self.dateFormatter {
+            dateFormatter = existingFormatter
+        } else {
+            dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            self.dateFormatter = dateFormatter
+        }
+        
+        return dateFormatter.stringFromDate(date)
     }
     
     func performWrappingForObject<T>(object: T, usingMirrors mirrors: [Mirror]) throws -> WrappedDictionary {
