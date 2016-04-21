@@ -339,6 +339,8 @@ private extension Wrapper {
                 wrappedKey = stringKey
             } else if let wrappableKey = key as? WrappableKey {
                 wrappedKey = wrappableKey.toWrappedKey()
+            } else if let stringConvertible = key as? CustomStringConvertible {
+                wrappedKey = stringConvertible.description
             } else {
                 wrappedKey = nil
             }
