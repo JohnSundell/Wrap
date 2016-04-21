@@ -575,7 +575,7 @@
 				INFOPLIST_FILE = Configs/tvOS.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.unbox.Unbox-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.unbox.Wrap-tvOS";
 				PRODUCT_NAME = Wrap;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -594,7 +594,7 @@
 				INFOPLIST_FILE = Configs/tvOS.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.unbox.Unbox-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.unbox.Wrap-tvOS";
 				PRODUCT_NAME = Wrap;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
