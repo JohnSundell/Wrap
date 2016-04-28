@@ -74,13 +74,31 @@ public func Wrap<T>(object: T, dateFormatter: NSDateFormatter? = nil) throws -> 
 }
 
 /**
- *  Alternative `Wrap()` implementation that returns JSON-encoded NSData
+ *  Alternative `Wrap()` overload that returns JSON-based `NSData`
  *
  *  See the documentation for the dictionary-based `Wrap()` function for more information
- *  and customization options.
  */
 public func Wrap<T>(object: T, writingOptions: NSJSONWritingOptions? = nil, dateFormatter: NSDateFormatter? = nil) throws -> NSData {
     return try Wrapper(dateFormatter: dateFormatter).wrap(object, writingOptions: writingOptions ?? [])
+}
+
+/**
+ *  Alternative `Wrap()` overload that encodes an array of objects into an array of dictionaries
+ *
+ *  See the documentation for the dictionary-based `Wrap()` function for more information
+ */
+public func Wrap<T>(objects: [T], dateFormatter: NSDateFormatter? = nil) throws -> [WrappedDictionary] {
+    return try objects.map({ try Wrap($0) })
+}
+
+/**
+ *  Alternative `Wrap()` overload that encodes an array of objects into JSON-based `NSData`
+ *
+ *  See the documentation for the dictionary-based `Wrap()` function for more information
+ */
+public func Wrap<T>(objects: [T], writingOptions: NSJSONWritingOptions? = nil, dateFormatter: NSDateFormatter? = nil) throws -> NSData {
+    let dictionaries: [WrappedDictionary] = try Wrap(objects)
+    return try NSJSONSerialization.dataWithJSONObject(dictionaries, options: writingOptions ?? [])
 }
 
 /**

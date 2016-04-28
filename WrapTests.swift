@@ -659,6 +659,24 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
+    
+    func testWrappingArray() {
+        struct Model {
+            let string: String
+        }
+        
+        do {
+            let models = [Model(string: "A"), Model(string: "B"), Model(string: "C")]
+            let wrapped: [WrappedDictionary] = try Wrap(models)
+            XCTAssertEqual(wrapped.count, 3)
+            
+            try VerifyDictionary(wrapped[0], againstDictionary: ["string" : "A"])
+            try VerifyDictionary(wrapped[1], againstDictionary: ["string" : "B"])
+            try VerifyDictionary(wrapped[2], againstDictionary: ["string" : "C"])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
 }
 
 // MARK: - Mocks
