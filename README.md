@@ -198,6 +198,10 @@ Add the line `github "johnsundell/wrap"` to your `Cartfile`
 
 Clone the repo and drag the file `Wrap.swift` into your Xcode project.
 
+**Swift Package Manager:**
+
+Add the line `.Package(url: "https://github.com/JohnSundell/Wrap.git", majorVersion: 1)` to your `Package.swift` file.
+
 ### Hope you enjoy wrapping your objects!
 
 For more updates on Wrap, and my other open source projects, follow me on Twitter: [@johnsundell](http://www.twitter.com/johnsundell)
