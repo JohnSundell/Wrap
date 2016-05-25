@@ -1,6 +1,6 @@
 # Wrap
 
-![Travis](https://img.shields.io/travis/JohnSundell/Wrap.svg)
+![Travis](https://img.shields.io/travis/JohnSundell/Wrap/master.svg)
 ![CocoaPods](https://img.shields.io/cocoapods/v/Wrap.svg)
 [![Carthage](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
