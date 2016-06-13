@@ -128,21 +128,25 @@ class WrapTests: XCTestCase {
     }
     
     func testDateProperty() {
-        let date = NSDate()
+        let date = Date()
+        let nsDate = NSDate()
         
         struct Model {
-            let date: NSDate
+            let date: Date
+            let nsDate: NSDate
         }
         
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         
         do {
-            let model = Model(date: date)
+            let model = Model(date: date, nsDate: nsDate)
             
             try Verify(dictionary: Wrap(model, dateFormatter: dateFormatter), againstDictionary: [
-                "date" : dateFormatter.string(from: date) as AnyObject
+                "date" : dateFormatter.string(from: date),
+                "nsDate" : dateFormatter.string(from: nsDate as Date)
             ])
         } catch {
+            XCTFail("\(try! Wrap(Model(date: date, nsDate: nsDate), dateFormatter: dateFormatter) as WrappedDictionary)")
             XCTFail(error.toString())
         }
     }
@@ -597,7 +601,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Wrap(Model()) as WrappedDictionary
+            _ = try Wrap(Model()) as WrappedDictionary
             XCTFail("Should have thrown")
         } catch WrapError.WrappingFailedForObject(let object) {
             XCTAssertTrue(object is Model)
@@ -616,7 +620,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Wrap(Model()) as WrappedDictionary
+            _ = try Wrap(Model()) as WrappedDictionary
             XCTFail("Should have thrown")
         } catch WrapError.WrappingFailedForObject(let object) {
             XCTAssertTrue(object is Model)
@@ -627,7 +631,7 @@ class WrapTests: XCTestCase {
     
     func testInvalidRootObjectThrows() {
         do {
-            try Wrap("A string") as WrappedDictionary
+            _ = try Wrap("A string") as WrappedDictionary
         } catch WrapError.InvalidTopLevelObject(let object) {
             XCTAssertEqual((object as? String) ?? "", "A string")
         } catch {
@@ -643,8 +647,8 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            let data: NSData = try Wrap(Model())
-            let object = try NSJSONSerialization.jsonObject(with: data, options: [])
+            let data: Data = try Wrap(Model())
+            let object = try JSONSerialization.jsonObject(with: data, options: [])
             
             guard let dictionary = object as? WrappedDictionary else {
                 return XCTFail("Invalid encoded type")
