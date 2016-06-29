@@ -443,6 +443,40 @@ class WrapTests: XCTestCase {
         }
     }
     
+    func testDeepNesting() {
+        
+        struct ThirdModel {
+            let string = "Third String"
+        }
+        
+        struct SecondModel {
+            let string = "Second String"
+            let nestedArray = [ThirdModel()]
+        }
+        
+        struct FirstModel {
+            let string = "First String"
+            let nestedDictionary = [ "nestedDictionary" : SecondModel()]
+        }
+        
+        do {
+            let wrappedDictionary :WrappedDictionary = try Wrap(FirstModel())
+            try VerifyDictionary(wrappedDictionary, againstDictionary: [
+                "string" : "First String",
+                "nestedDictionary" : [
+                    "nestedDictionary" : [
+                        "string" : "Second String",
+                        "nestedArray" : [
+                            ["string" : "Third String"]
+                        ]
+                    ]
+                ]
+            ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+    
     func testObjectiveCObjectProperties() {
         struct Model {
             let string = NSString(string: "Hello")
@@ -688,7 +722,7 @@ private protocol MockProtocol {
 
 // MARK: - Utilities
 
-private enum DictionaryVerificationError: ErrorType {
+private enum VerificationError: ErrorType {
     case CountMismatch
     case CannotVerifyValue(AnyObject)
     case MissingValueForKey(String)
@@ -704,12 +738,12 @@ extension NSString: Verifiable {}
 
 private func VerifyDictionary(dictionary: WrappedDictionary, againstDictionary expectedDictionary: WrappedDictionary) throws {
     if dictionary.count != expectedDictionary.count {
-        throw DictionaryVerificationError.CountMismatch
+        throw VerificationError.CountMismatch
     }
     
     for (key, expectedValue) in expectedDictionary {
         guard let actualValue = dictionary[key] else {
-            throw DictionaryVerificationError.MissingValueForKey(key)
+            throw VerificationError.MissingValueForKey(key)
         }
         
         if let expectedNestedDictionary = expectedValue as? WrappedDictionary {
@@ -717,23 +751,45 @@ private func VerifyDictionary(dictionary: WrappedDictionary, againstDictionary e
                 try VerifyDictionary(actualNestedDictionary, againstDictionary: expectedNestedDictionary)
                 continue
             } else {
-                throw DictionaryVerificationError.ValueMismatchBetween(actualValue, expectedValue)
+                throw VerificationError.ValueMismatchBetween(actualValue, expectedValue)
             }
         }
         
         if let expectedNestedArray = expectedValue as? [AnyObject] {
             if let actualNestedArray = actualValue as? [AnyObject] {
-                if actualNestedArray.count != expectedNestedArray.count {
-                    throw DictionaryVerificationError.CountMismatch
-                }
-                
-                for (index, value) in actualNestedArray.enumerate() {
-                    try VerifyValue(value, againstValue: expectedNestedArray[index])
-                }
-                
+                try VerifyArray(actualNestedArray, againstArray: expectedNestedArray)
                 continue
             } else {
-                throw DictionaryVerificationError.ValueMismatchBetween(actualValue, expectedValue)
+                throw VerificationError.ValueMismatchBetween(actualValue, expectedValue)
+            }
+        }
+        
+        try VerifyValue(actualValue, againstValue: expectedValue)
+    }
+}
+
+private func VerifyArray(actualArray: [AnyObject], againstArray expectedArray: [AnyObject]) throws {
+    if actualArray.count != expectedArray.count {
+        throw VerificationError.CountMismatch
+    }
+    for (index, expectedValue) in expectedArray.enumerate() {
+        let actualValue = actualArray[index]
+
+        if let expectedNestedDictionary = expectedValue as? WrappedDictionary {
+            if let actualNestedDictionary = actualValue as? WrappedDictionary {
+                try VerifyDictionary(actualNestedDictionary, againstDictionary: expectedNestedDictionary)
+                continue
+            } else {
+                throw VerificationError.ValueMismatchBetween(actualValue, expectedValue)
+            }
+        }
+        
+        if let expectedNestedArray = expectedValue as? [AnyObject] {
+            if let actualNestedArray = actualValue as? [AnyObject] {
+                try VerifyArray(actualNestedArray, againstArray: expectedNestedArray)
+                continue
+            } else {
+                throw VerificationError.ValueMismatchBetween(actualValue, expectedValue)
             }
         }
         
@@ -743,15 +799,15 @@ private func VerifyDictionary(dictionary: WrappedDictionary, againstDictionary e
 
 private func VerifyValue(value: AnyObject, againstValue expectedValue: AnyObject) throws {
     guard let expectedVerifiableValue = expectedValue as? Verifiable else {
-        throw DictionaryVerificationError.CannotVerifyValue(expectedValue)
+        throw VerificationError.CannotVerifyValue(expectedValue)
     }
     
     guard let actualVerifiableValue = value as? Verifiable else {
-        throw DictionaryVerificationError.CannotVerifyValue(value)
+        throw VerificationError.CannotVerifyValue(value)
     }
     
     if actualVerifiableValue.hashValue != expectedVerifiableValue.hashValue {
-        throw DictionaryVerificationError.ValueMismatchBetween(value, expectedValue)
+        throw VerificationError.ValueMismatchBetween(value, expectedValue)
     }
 }
 
