@@ -170,7 +170,7 @@ public protocol WrappableEnum: WrapCustomizable {}
 public class Wrapper {
     private var dateFormatter: NSDateFormatter?
     
-    /// Any contextual object that was supplied when unboxing was started
+    /// Any contextual object that was supplied when wrapping was started
     public let context: Any?
     
     /**

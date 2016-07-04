@@ -592,7 +592,7 @@ class WrapTests: XCTestCase {
         do {
             try VerifyDictionary(Wrap(Model()), againstDictionary: [
                 "int" : 27
-                ])
+            ])
         } catch {
             XCTFail(error.toString())
         }
