@@ -268,6 +268,22 @@ extension Int: WrappableKey {
     }
 }
 
+// MARK: - Custom Wrap Key Transformations
+
+public protocol WrapToSnakeCase: WrapCustomizable {}
+
+public extension WrapToSnakeCase {
+    func keyForWrappingPropertyNamed(propertyName: String) -> String? {
+        let regex = try! NSRegularExpression(pattern: "(?<=[a-z])([A-Z])|([A-Z])(?=[a-z])",
+                                             options: [])
+        return regex.stringByReplacingMatchesInString(propertyName,
+                                                      options: [],
+                                                      range: NSRange(location: 0, length: propertyName.characters.count),
+                                                      withTemplate: "_$1$2").lowercaseString
+    }
+}
+
+
 // MARK: - Private
 
 private extension Wrapper {
