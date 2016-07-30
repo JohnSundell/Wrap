@@ -424,7 +424,7 @@ private extension Wrapper {
                     continue
                 }
                 
-                guard let propertyName = property.label where propertyName != "Some" else {
+                guard let propertyName = property.label, propertyName != "Some" else {
                     continue
                 }
                 
