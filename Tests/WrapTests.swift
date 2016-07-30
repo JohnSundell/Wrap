@@ -375,7 +375,7 @@ class WrapTests: XCTestCase {
             if let nested = wrapped["nested"] as? [WrappedDictionary] {
                 XCTAssertEqual(nested.count, 2)
                 
-                if let firstDictionary = nested.first, secondDictionary = nested.last {
+                if let firstDictionary = nested.first, let secondDictionary = nested.last {
                     try Verify(dictionary: firstDictionary, againstDictionary: [
                         "string1" : "String1"
                     ])
