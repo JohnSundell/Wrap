@@ -692,7 +692,7 @@ private protocol MockProtocol {
 
 // MARK: - Utilities
 
-private enum DictionaryVerificationError: ErrorProtocol {
+private enum DictionaryVerificationError: Error {
     case CountMismatch
     case CannotVerifyValue(AnyObject)
     case MissingValueForKey(String)
@@ -759,7 +759,7 @@ private func Verify(value: AnyObject, againstValue expectedValue: AnyObject) thr
     }
 }
 
-private extension ErrorProtocol {
+private extension Error {
     func toString() -> String {
         if let stringConvertible = self as? CustomStringConvertible {
             return stringConvertible.description

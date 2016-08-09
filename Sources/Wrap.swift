@@ -194,7 +194,7 @@ public class Wrapper {
 }
 
 /// Error type used by Wrap
-public enum WrapError: ErrorProtocol {
+public enum WrapError: Error {
     /// Thrown when an invalid top level object (such as a String or Int) was passed to `Wrap()`
     case InvalidTopLevelObject(Any)
     /// Thrown when an object couldn't be wrapped. This is a last resort error.
@@ -352,7 +352,7 @@ private extension Wrapper {
             }
             
             return self.verifyWrappedValue(value: value, propertyName: propertyName)
-        } else if value is NilLiteralConvertible && mirror.children.count == 1 {
+        } else if value is ExpressibleByNilLiteral && mirror.children.count == 1 {
             if let firstMirrorChild = mirror.children.first {
                 return try self.wrap(value: firstMirrorChild.value, propertyName: propertyName)
             }
