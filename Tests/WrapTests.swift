@@ -186,7 +186,7 @@ class WrapTests: XCTestCase {
     func testArrayProperties() {
         struct Model {
             let homogeneous = ["Wrap", "Tests"]
-            let mixed = ["Wrap", 15, 8.3]
+            let mixed = ["Wrap", 15, 8.3] as [Any]
         }
         
         do {
@@ -214,7 +214,7 @@ class WrapTests: XCTestCase {
                 "Key5" : [
                     "NestedKey" : "NestedValue"
                 ]
-            ]
+            ] as [String : Any]
         }
         
         do {
@@ -241,7 +241,7 @@ class WrapTests: XCTestCase {
     func testSetProperties() {
         struct Model {
             let homogeneous: Set<String> = ["Wrap", "Tests"]
-            let mixed: Set<NSObject> = ["Wrap", 15, 8.3]
+            let mixed: Set<AnyHashable> = ["Wrap", 15, 8.3]
         }
         
         do {
@@ -500,7 +500,7 @@ class WrapTests: XCTestCase {
             let customized = "I'm customized"
             let skipThis = 15
             
-            private func keyForWrapping(propertyName: String) -> String? {
+            fileprivate func keyForWrapping(propertyName: String) -> String? {
                 if propertyName == "customized" {
                     return "totallyCustomized"
                 }
@@ -527,7 +527,7 @@ class WrapTests: XCTestCase {
         struct Model: WrapCustomizable {
             let string = "A string"
             
-            func wrap() -> AnyObject? {
+            func wrap() -> Any? {
                 return [
                     "custom" : "A value"
                 ]
@@ -573,7 +573,7 @@ class WrapTests: XCTestCase {
             let string = "Hello"
             let int = 16
             
-            func wrap(propertyName: String, originalValue: Any) throws -> AnyObject? {
+            func wrap(propertyName: String, originalValue: Any) throws -> Any? {
                 if propertyName == "int" {
                     XCTAssertEqual((originalValue as? Int) ?? 0, self.int)
                     return 27
@@ -694,17 +694,10 @@ private protocol MockProtocol {
 
 private enum DictionaryVerificationError: Error {
     case CountMismatch
-    case CannotVerifyValue(AnyObject)
+    case CannotVerifyValue(Any)
     case MissingValueForKey(String)
-    case ValueMismatchBetween(AnyObject, AnyObject)
+    case ValueMismatchBetween(Any, Any)
 }
-
-private protocol Verifiable {
-    var hashValue: Int { get }
-}
-
-extension NSNumber: Verifiable {}
-extension NSString: Verifiable {}
 
 private func Verify(dictionary: WrappedDictionary, againstDictionary expectedDictionary: WrappedDictionary) throws {
     if dictionary.count != expectedDictionary.count {
@@ -745,12 +738,12 @@ private func Verify(dictionary: WrappedDictionary, againstDictionary expectedDic
     }
 }
 
-private func Verify(value: AnyObject, againstValue expectedValue: AnyObject) throws {
-    guard let expectedVerifiableValue = expectedValue as? Verifiable else {
+private func Verify(value: Any, againstValue expectedValue: Any) throws {
+    guard let expectedVerifiableValue = expectedValue as? AnyHashable else {
         throw DictionaryVerificationError.CannotVerifyValue(expectedValue)
     }
     
-    guard let actualVerifiableValue = value as? Verifiable else {
+    guard let actualVerifiableValue = value as? AnyHashable else {
         throw DictionaryVerificationError.CannotVerifyValue(value)
     }
     
