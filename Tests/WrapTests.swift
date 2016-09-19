@@ -805,6 +805,7 @@ private func Verify(dictionary: WrappedDictionary, againstDictionary expectedDic
             throw VerificationError.missingValueForKey(key)
         }
         
+        try VerifyValue(actualValue, againstValue: expectedValue)
         if let expectedNestedDictionary = expectedValue as? WrappedDictionary {
             if let actualNestedDictionary = actualValue as? WrappedDictionary {
                 try Verify(dictionary: actualNestedDictionary, againstDictionary: expectedNestedDictionary)
