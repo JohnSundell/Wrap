@@ -530,7 +530,7 @@ class WrapTests: XCTestCase {
             let customized = "I'm customized"
             let skipThis = 15
             
-            private func keyForWrappingPropertyNamed(propertyName: String) -> String? {
+            private func keyForWrappingPropertyNamed(propertyName: String, context: Any?) -> String? {
                 if propertyName == "customized" {
                     return "totallyCustomized"
                 }
@@ -557,7 +557,7 @@ class WrapTests: XCTestCase {
         struct Model: WrapCustomizable {
             let string = "A string"
             
-            func wrap() -> AnyObject? {
+            func wrap(context: Any?) -> AnyObject? {
                 return [
                     "custom" : "A value"
                 ]
@@ -577,7 +577,7 @@ class WrapTests: XCTestCase {
         struct Model: WrapCustomizable {
             let int = 27
             
-            func wrap() -> AnyObject? {
+            func wrap(context: Any?) -> AnyObject? {
                 do {
                     var wrapped = try Wrapper().wrap(self)
                     wrapped["custom"] = "A value"
@@ -598,12 +598,55 @@ class WrapTests: XCTestCase {
         }
     }
     
+    func testCustomWrappingWithContext() {
+        struct Model: WrapCustomizable {
+            let int = 27
+            
+            func wrap(context: Any?) -> AnyObject? {
+                do {
+                    if context as? String == "OtherContext" {
+                        var wrapped = try Wrapper().wrap(self)
+                        wrapped["custom"] = "A value"
+                        return wrapped
+                    } else {
+                        return nil
+                    }
+                } catch {
+                    return nil
+                }
+            }
+            func keyForWrappingPropertyNamed(propertyName: String, context: Any?) -> String? {
+                if context as? String == "OtherContext" && propertyName == "int" {
+                    return "age"
+                }
+                return propertyName
+            }
+        }
+        
+        do {
+            try VerifyDictionary(Wrap(Model()), againstDictionary: [
+                "int" : 27
+            ])
+        } catch {
+            XCTFail(error.toString())
+        }
+        
+        do {
+            try VerifyDictionary(Wrap(Model(), context:"OtherContext"), againstDictionary: [
+                "age" : 27,
+                "custom" : "A value"
+                ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+    
     func testCustomWrappingForSingleProperty() {
         struct Model: WrapCustomizable {
             let string = "Hello"
             let int = 16
             
-            private func wrapPropertyNamed(propertyName: String, withValue value: Any) -> AnyObject? {
+            private func wrapPropertyNamed(propertyName: String, withValue value: Any, context: Any?) -> AnyObject? {
                 if propertyName == "int" {
                     XCTAssertEqual((value as? Int) ?? 0, self.int)
                     return 27
@@ -625,7 +668,7 @@ class WrapTests: XCTestCase {
     
     func testCustomWrappingFailureThrows() {
         struct Model: WrapCustomizable {
-            func wrap() -> AnyObject? {
+            func wrap(context: Any?) -> AnyObject? {
                 return nil
             }
         }
@@ -644,7 +687,7 @@ class WrapTests: XCTestCase {
         struct Model: WrapCustomizable {
             let string = "A string"
             
-            private func wrapPropertyNamed(propertyName: String, withValue value: Any) throws -> AnyObject? {
+            private func wrapPropertyNamed(propertyName: String, withValue value: Any, context: Any?) throws -> AnyObject? {
                 throw NSError(domain: "ERROR", code: 0, userInfo: nil)
             }
         }
