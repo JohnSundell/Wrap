@@ -726,10 +726,10 @@ private protocol MockProtocol {
 // MARK: - Utilities
 
 private enum VerificationError: Error {
-    case CountMismatch
-    case CannotVerifyValue(Any)
-    case MissingValueForKey(String)
-    case ValueMismatchBetween(Any, Any)
+    case countMismatch
+    case cannotVerifyValue(Any)
+    case missingValueForKey(String)
+    case valueMismatchBetween(Any, Any)
 }
 
 private protocol Verifiable {
@@ -797,12 +797,12 @@ extension NSDate: Verifiable {
 
 private func Verify(dictionary: WrappedDictionary, againstDictionary expectedDictionary: WrappedDictionary) throws {
     if dictionary.count != expectedDictionary.count {
-        throw VerificationError.CountMismatch
+        throw VerificationError.countMismatch
     }
     
     for (key, expectedValue) in expectedDictionary {
         guard let actualValue = dictionary[key] else {
-            throw VerificationError.MissingValueForKey(key)
+            throw VerificationError.missingValueForKey(key)
         }
         
         if let expectedNestedDictionary = expectedValue as? WrappedDictionary {
@@ -810,7 +810,7 @@ private func Verify(dictionary: WrappedDictionary, againstDictionary expectedDic
                 try Verify(dictionary: actualNestedDictionary, againstDictionary: expectedNestedDictionary)
                 continue
             } else {
-                throw VerificationError.ValueMismatchBetween(actualValue, expectedValue)
+                throw VerificationError.valueMismatchBetween(actualValue, expectedValue)
             }
         }
         
@@ -819,7 +819,7 @@ private func Verify(dictionary: WrappedDictionary, againstDictionary expectedDic
                 try Verify(array: actualNestedArray, againstArray: expectedNestedArray)
                 continue
             } else {
-                throw VerificationError.ValueMismatchBetween(actualValue, expectedValue)
+                throw VerificationError.valueMismatchBetween(actualValue, expectedValue)
             }
         }
         
@@ -829,7 +829,7 @@ private func Verify(dictionary: WrappedDictionary, againstDictionary expectedDic
 
 private func Verify(array: [Any], againstArray expectedArray: [Any]) throws {
     if array.count != expectedArray.count {
-        throw VerificationError.CountMismatch
+        throw VerificationError.countMismatch
     }
     
     for (index, expectedValue) in expectedArray.enumerated() {
@@ -840,7 +840,7 @@ private func Verify(array: [Any], againstArray expectedArray: [Any]) throws {
                 try Verify(dictionary: actualNestedDictionary, againstDictionary: expectedNestedDictionary)
                 continue
             } else {
-                throw VerificationError.ValueMismatchBetween(actualValue, expectedValue)
+                throw VerificationError.valueMismatchBetween(actualValue, expectedValue)
             }
         }
         
@@ -849,7 +849,7 @@ private func Verify(array: [Any], againstArray expectedArray: [Any]) throws {
                 try Verify(array: actualNestedArray, againstArray: expectedNestedArray)
                 continue
             } else {
-                throw VerificationError.ValueMismatchBetween(actualValue, expectedValue)
+                throw VerificationError.valueMismatchBetween(actualValue, expectedValue)
             }
         }
         
@@ -859,11 +859,11 @@ private func Verify(array: [Any], againstArray expectedArray: [Any]) throws {
 
 private func Verify(value: Any, againstValue expectedValue: Any) throws {
     guard let expectedVerifiableValue = expectedValue as? Verifiable else {
-        throw VerificationError.CannotVerifyValue(expectedValue)
+        throw VerificationError.cannotVerifyValue(expectedValue)
     }
     
     guard let actualVerifiableValue = value as? Verifiable else {
-        throw VerificationError.CannotVerifyValue(value)
+        throw VerificationError.cannotVerifyValue(value)
     }
     
     if actualVerifiableValue.hashValue != expectedVerifiableValue.hashValue {
@@ -871,13 +871,13 @@ private func Verify(value: Any, againstValue expectedValue: Any) throws {
             let expectedValueType = type(of: expectedVerifiableValue)
             
             guard let convertedObject = expectedValueType.convert(objectiveCObject: objectiveCObject) else {
-                throw VerificationError.CannotVerifyValue(value)
+                throw VerificationError.cannotVerifyValue(value)
             }
             
             return try Verify(value: convertedObject, againstValue: expectedVerifiableValue)
         }
         
-        throw VerificationError.ValueMismatchBetween(value, expectedValue)
+        throw VerificationError.valueMismatchBetween(value, expectedValue)
     }
 }
 
