@@ -500,7 +500,7 @@ class WrapTests: XCTestCase {
             let customized = "I'm customized"
             let skipThis = 15
             
-            fileprivate func keyForWrapping(propertyName: String) -> String? {
+            fileprivate func keyForWrapping(propertyNamed propertyName: String) -> String? {
                 if propertyName == "customized" {
                     return "totallyCustomized"
                 }
@@ -573,7 +573,7 @@ class WrapTests: XCTestCase {
             let string = "Hello"
             let int = 16
             
-            func wrap(propertyName: String, originalValue: Any) throws -> Any? {
+            func wrap(propertyNamed propertyName: String, originalValue: Any) throws -> Any? {
                 if propertyName == "int" {
                     XCTAssertEqual((originalValue as? Int) ?? 0, self.int)
                     return 27
@@ -614,7 +614,7 @@ class WrapTests: XCTestCase {
         struct Model: WrapCustomizable {
             let string = "A string"
             
-            func wrap(propertyName: String, originalValue: Any) throws -> Any? {
+            func wrap(propertyNamed propertyName: String, originalValue: Any) throws -> Any? {
                 throw NSError(domain: "ERROR", code: 0, userInfo: nil)
             }
         }

@@ -126,7 +126,7 @@ public protocol WrapCustomizable {
      *
      *  Returning nil from this method will cause Wrap to skip the property
      */
-    func keyForWrapping(propertyName: String) -> String?
+    func keyForWrapping(propertyNamed propertyName: String) -> String?
     /**
      *  Override the wrapping of any property of this type
      *
@@ -142,7 +142,7 @@ public protocol WrapCustomizable {
      *  you can choose to throw. This will cause a WrapError.WrappingFailedForObject
      *  to be thrown from the main `Wrap()` call that started the process.
      */
-    func wrap(propertyName: String, originalValue: Any) throws -> Any?
+    func wrap(propertyNamed propertyName: String, originalValue: Any) throws -> Any?
 }
 
 /// Protocol implemented by types that may be used as keys in a wrapped Dictionary
@@ -209,11 +209,11 @@ public extension WrapCustomizable {
         return try? Wrapper().wrap(object: self)
     }
     
-    func keyForWrapping(propertyName: String) -> String? {
+    func keyForWrapping(propertyNamed propertyName: String) -> String? {
         return propertyName
     }
     
-    func wrap(propertyName: String, originalValue: Any) throws -> Any? {
+    func wrap(propertyNamed propertyName: String, originalValue: Any) throws -> Any? {
         return try Wrapper().wrap(value: originalValue, propertyName: propertyName)
     }
 }
@@ -431,13 +431,13 @@ private extension Wrapper {
                 let wrappingKey: String?
                 
                 if let customizable = customizable {
-                    wrappingKey = customizable.keyForWrapping(propertyName: propertyName)
+                    wrappingKey = customizable.keyForWrapping(propertyNamed: propertyName)
                 } else {
                     wrappingKey = propertyName
                 }
                 
                 if let wrappingKey = wrappingKey {
-                    if let wrappedProperty = try customizable?.wrap(propertyName: propertyName, originalValue: property.value) {
+                    if let wrappedProperty = try customizable?.wrap(propertyNamed: propertyName, originalValue: property.value) {
                         wrappedDictionary[wrappingKey] = wrappedProperty
                     } else {
                         wrappedDictionary[wrappingKey] = try self.wrap(value: property.value, propertyName: propertyName)
