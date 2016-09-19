@@ -66,15 +66,15 @@ class WrapTests: XCTestCase {
     
     func testRootEnum() {
         enum Enum {
-            case First
-            case Second(String)
+            case first
+            case second(String)
         }
         
         do {
-            try Verify(dictionary: wrap(Enum.First), againstDictionary: [:])
+            try Verify(dictionary: wrap(Enum.first), againstDictionary: [:])
             
-            try Verify(dictionary: wrap(Enum.Second("Hello")), againstDictionary: [
-                "Second" : "Hello"
+            try Verify(dictionary: wrap(Enum.second("Hello")), againstDictionary: [
+                "second" : "Hello"
             ])
         } catch {
             XCTFail(error.toString())
@@ -83,39 +83,39 @@ class WrapTests: XCTestCase {
     
     func testEnumProperties() {
         enum Enum {
-            case First
-            case Second(String)
-            case Third(intValue: Int)
+            case first
+            case second(String)
+            case third(intValue: Int)
         }
         
         enum IntEnum: Int, WrappableEnum {
-            case First
-            case Second = 17
+            case first
+            case second = 17
         }
         
         enum StringEnum: String, WrappableEnum {
-            case First = "First string"
-            case Second = "Second string"
+            case first = "First string"
+            case second = "Second string"
         }
         
         struct Model {
-            let first = Enum.First
-            let second = Enum.Second("Hello")
-            let third = Enum.Third(intValue: 15)
-            let firstInt = IntEnum.First
-            let secondInt = IntEnum.Second
-            let firstString = StringEnum.First
-            let secondString = StringEnum.Second
+            let first = Enum.first
+            let second = Enum.second("Hello")
+            let third = Enum.third(intValue: 15)
+            let firstInt = IntEnum.first
+            let secondInt = IntEnum.second
+            let firstString = StringEnum.first
+            let secondString = StringEnum.second
         }
         
         do {
             try Verify(dictionary: wrap(Model()), againstDictionary: [
-                "first" : "First",
+                "first" : "first",
                 "second" : [
-                    "Second" : "Hello"
+                    "second" : "Hello"
                 ],
                 "third" : [
-                    "Third" : 15
+                    "third" : 15
                 ],
                 "firstInt" : 0,
                 "secondInt" : 17,
@@ -500,8 +500,8 @@ class WrapTests: XCTestCase {
     
     func testWrappableKey() {
         enum Key: Int, WrappableKey {
-            case First = 15
-            case Second = 19
+            case first = 15
+            case second = 19
             
             func toWrappedKey() -> String {
                 return String(self.rawValue)
@@ -510,8 +510,8 @@ class WrapTests: XCTestCase {
         
         struct Model {
             let dictionary = [
-                Key.First : "First value",
-                Key.Second : "Second value"
+                Key.first : "First value",
+                Key.second : "Second value"
             ]
         }
         
