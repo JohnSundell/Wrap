@@ -96,7 +96,7 @@ public func Wrap<T>(_ objects: [T], dateFormatter: DateFormatter? = nil) throws 
  *
  *  See the documentation for the dictionary-based `Wrap()` function for more information
  */
-public func Wrap<T>(objects: [T], writingOptions: JSONSerialization.WritingOptions? = nil, dateFormatter: DateFormatter? = nil) throws -> Data {
+public func Wrap<T>(_ objects: [T], writingOptions: JSONSerialization.WritingOptions? = nil, dateFormatter: DateFormatter? = nil) throws -> Data {
     let dictionaries: [WrappedDictionary] = try Wrap(objects)
     return try JSONSerialization.data(withJSONObject: dictionaries as AnyObject, options: writingOptions ?? [])
 }
