@@ -636,7 +636,7 @@ class WrapTests: XCTestCase {
         do {
             _ = try Wrap(Model()) as WrappedDictionary
             XCTFail("Should have thrown")
-        } catch WrapError.WrappingFailedForObject(let object) {
+        } catch WrapError.wrappingFailedForObject(let object) {
             XCTAssertTrue(object is Model)
         } catch {
             XCTFail("Invalid error type: " + error.toString())
@@ -655,7 +655,7 @@ class WrapTests: XCTestCase {
         do {
             _ = try Wrap(Model()) as WrappedDictionary
             XCTFail("Should have thrown")
-        } catch WrapError.WrappingFailedForObject(let object) {
+        } catch WrapError.wrappingFailedForObject(let object) {
             XCTAssertTrue(object is Model)
         } catch {
             XCTFail("Invalid error type: " + error.toString())
@@ -665,7 +665,7 @@ class WrapTests: XCTestCase {
     func testInvalidRootObjectThrows() {
         do {
             _ = try Wrap("A string") as WrappedDictionary
-        } catch WrapError.InvalidTopLevelObject(let object) {
+        } catch WrapError.invalidTopLevelObject(let object) {
             XCTAssertEqual((object as? String) ?? "", "A string")
         } catch {
             XCTFail("Invalid error type: " + error.toString())

@@ -196,9 +196,9 @@ public class Wrapper {
 /// Error type used by Wrap
 public enum WrapError: Error {
     /// Thrown when an invalid top level object (such as a String or Int) was passed to `Wrap()`
-    case InvalidTopLevelObject(Any)
+    case invalidTopLevelObject(Any)
     /// Thrown when an object couldn't be wrapped. This is a last resort error.
-    case WrappingFailedForObject(Any)
+    case wrappingFailedForObject(Any)
 }
 
 // MARK: - Default protocol implementations
@@ -304,7 +304,7 @@ private extension Wrapper {
                 let wrapped = try self.performCustomWrapping(object: customizable)
                 
                 guard let wrappedDictionary = wrapped as? WrappedDictionary else {
-                    throw WrapError.InvalidTopLevelObject(object)
+                    throw WrapError.invalidTopLevelObject(object)
                 }
                 
                 return wrappedDictionary
@@ -345,7 +345,7 @@ private extension Wrapper {
                         return wrapped
                     }
                     
-                    throw WrapError.WrappingFailedForObject(value)
+                    throw WrapError.wrappingFailedForObject(value)
                 }
                 
                 return "\(value)"
@@ -451,7 +451,7 @@ private extension Wrapper {
     
     func performCustomWrapping(object: WrapCustomizable) throws -> Any {
         guard let wrapped = object.wrap() else {
-            throw WrapError.WrappingFailedForObject(object)
+            throw WrapError.wrappingFailedForObject(object)
         }
         
         return wrapped
