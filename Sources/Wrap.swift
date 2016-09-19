@@ -118,7 +118,7 @@ public protocol WrapCustomizable {
      *  cause an infinite recursion.
      *
      *  Returning nil from this method will be treated as an error, and cause
-     *  a `WrapError.WrappingFailedForObject()` error to be thrown.
+     *  a `WrapError.wrappingFailedForObject()` error to be thrown.
      */
     func wrap() -> Any?
     /**
