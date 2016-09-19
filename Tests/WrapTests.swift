@@ -186,7 +186,7 @@ class WrapTests: XCTestCase {
     func testArrayProperties() {
         struct Model {
             let homogeneous = ["Wrap", "Tests"]
-            let mixed = ["Wrap", 15, 8.3]
+            let mixed = ["Wrap", 15, 8.3] as [Any]
         }
         
         do {
@@ -206,7 +206,7 @@ class WrapTests: XCTestCase {
                 "Key2" : "Value2"
             ]
             
-            let mixed = [
+            let mixed: WrappedDictionary = [
                 "Key1" : 15,
                 "Key2" : 19.2,
                 "Key3" : "Value",
@@ -241,7 +241,7 @@ class WrapTests: XCTestCase {
     func testSetProperties() {
         struct Model {
             let homogeneous: Set<String> = ["Wrap", "Tests"]
-            let mixed: Set<NSObject> = ["Wrap", 15, 8.3]
+            let mixed: Set<NSObject> = ["Wrap" as NSObject, 15 as NSObject, 8.3 as NSObject]
         }
         
         do {
@@ -500,7 +500,7 @@ class WrapTests: XCTestCase {
             let customized = "I'm customized"
             let skipThis = 15
             
-            private func keyForWrapping(propertyName: String) -> String? {
+            fileprivate func keyForWrapping(propertyName: String) -> String? {
                 if propertyName == "customized" {
                     return "totallyCustomized"
                 }
@@ -527,7 +527,7 @@ class WrapTests: XCTestCase {
         struct Model: WrapCustomizable {
             let string = "A string"
             
-            func wrap() -> AnyObject? {
+            func wrap() -> Any? {
                 return [
                     "custom" : "A value"
                 ]
@@ -547,11 +547,11 @@ class WrapTests: XCTestCase {
         struct Model: WrapCustomizable {
             let int = 27
             
-            func wrap() -> AnyObject? {
+            func wrap() -> Any? {
                 do {
                     var wrapped = try Wrapper().wrap(object: self)
                     wrapped["custom"] = "A value"
-                    return wrapped as AnyObject
+                    return wrapped
                 } catch {
                     return nil
                 }
@@ -573,7 +573,7 @@ class WrapTests: XCTestCase {
             let string = "Hello"
             let int = 16
             
-            func wrap(propertyName: String, originalValue: Any) throws -> AnyObject? {
+            func wrap(propertyName: String, originalValue: Any) throws -> Any? {
                 if propertyName == "int" {
                     XCTAssertEqual((originalValue as? Int) ?? 0, self.int)
                     return 27
@@ -595,7 +595,7 @@ class WrapTests: XCTestCase {
     
     func testCustomWrappingFailureThrows() {
         struct Model: WrapCustomizable {
-            func wrap() -> AnyObject? {
+            func wrap() -> Any? {
                 return nil
             }
         }
@@ -614,7 +614,7 @@ class WrapTests: XCTestCase {
         struct Model: WrapCustomizable {
             let string = "A string"
             
-            func wrap(propertyName: String, originalValue: Any) throws -> AnyObject? {
+            func wrap(propertyName: String, originalValue: Any) throws -> Any? {
                 throw NSError(domain: "ERROR", code: 0, userInfo: nil)
             }
         }
@@ -639,7 +639,7 @@ class WrapTests: XCTestCase {
         }
     }
     
-    func testNSDataWrapping() {
+    func testDataWrapping() {
         struct Model {
             let string = "A string"
             let int = 42
@@ -694,17 +694,73 @@ private protocol MockProtocol {
 
 private enum DictionaryVerificationError: Error {
     case CountMismatch
-    case CannotVerifyValue(AnyObject)
+    case CannotVerifyValue(Any)
     case MissingValueForKey(String)
-    case ValueMismatchBetween(AnyObject, AnyObject)
+    case ValueMismatchBetween(Any, Any)
 }
 
 private protocol Verifiable {
+    static func convert(objectiveCObject: NSObject) -> Self?
     var hashValue: Int { get }
 }
 
-extension NSNumber: Verifiable {}
-extension NSString: Verifiable {}
+extension Int: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> Int? {
+        guard let number = object as? NSNumber else {
+            return nil
+        }
+        
+        return Int(number)
+    }
+}
+
+extension Double: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> Double? {
+        guard let number = object as? NSNumber else {
+            return nil
+        }
+        
+        return Double(number)
+    }
+}
+
+extension String: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> String? {
+        guard let string = object as? NSString else {
+            return nil
+        }
+        
+        return String(string)
+    }
+}
+
+extension Date: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> Date? {
+        guard let date = object as? NSDate else {
+            return nil
+        }
+        
+        return Date(timeIntervalSinceReferenceDate: date.timeIntervalSinceReferenceDate)
+    }
+}
+
+extension NSNumber: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> Self? {
+        return nil
+    }
+}
+
+extension NSString: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> Self? {
+        return nil
+    }
+}
+
+extension NSDate: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> Self? {
+        return nil
+    }
+}
 
 private func Verify(dictionary: WrappedDictionary, againstDictionary expectedDictionary: WrappedDictionary) throws {
     if dictionary.count != expectedDictionary.count {
@@ -745,7 +801,7 @@ private func Verify(dictionary: WrappedDictionary, againstDictionary expectedDic
     }
 }
 
-private func Verify(value: AnyObject, againstValue expectedValue: AnyObject) throws {
+private func Verify(value: Any, againstValue expectedValue: Any) throws {
     guard let expectedVerifiableValue = expectedValue as? Verifiable else {
         throw DictionaryVerificationError.CannotVerifyValue(expectedValue)
     }
@@ -755,6 +811,16 @@ private func Verify(value: AnyObject, againstValue expectedValue: AnyObject) thr
     }
     
     if actualVerifiableValue.hashValue != expectedVerifiableValue.hashValue {
+        if let objectiveCObject = value as? NSObject {
+            let expectedValueType = type(of: expectedVerifiableValue)
+            
+            guard let convertedObject = expectedValueType.convert(objectiveCObject: objectiveCObject) else {
+                throw DictionaryVerificationError.CannotVerifyValue(value)
+            }
+            
+            return try Verify(value: convertedObject, againstValue: expectedVerifiableValue)
+        }
+        
         throw DictionaryVerificationError.ValueMismatchBetween(value, expectedValue)
     }
 }
