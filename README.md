@@ -6,7 +6,7 @@
 
 Wrap is an easy to use Swift JSON encoder. Don't spend hours writing JSON encoding code - just wrap it instead!
 
-Using Wrap is as easy as calling `Wrap()` on any instance of a `class` or `struct` that you wish to encode. It automatically encodes all of your type’s properties, including nested objects, collections, enums and more!
+Using Wrap is as easy as calling `wrap()` on any instance of a `class` or `struct` that you wish to encode. It automatically encodes all of your type’s properties, including nested objects, collections, enums and more!
 
 It also provides a suite of simple but powerful customization APIs that enables you to use it on any model setup with ease.
 
@@ -23,10 +23,10 @@ struct User {
 let user = User(name: "John", age: 28)
 ```
 
-Using `Wrap()` you can now encode a `User` instance with one command:
+Using `wrap()` you can now encode a `User` instance with one command:
 
 ```swift
-let dictionary: [String : AnyObject] = try Wrap(user)
+let dictionary: [String : Any] = try wrap(user)
 ```
 
 Which will produce the following `Dictionary`:
@@ -86,10 +86,10 @@ let ship = SpaceShip(
 )
 ```
 
-And now let’s encode it with one call to `Wrap()`:
+And now let’s encode it with one call to `wrap()`:
 
 ```swift
-let dictionary: WrappedDictionary = try Wrap(ship)
+let dictionary: WrappedDictionary = try wrap(ship)
 ```
 
 Which will produce the following dictionary:
@@ -118,14 +118,14 @@ While automation is awesome, customization is just as important. Thankfully, Wra
 
 #### Customizing keys
 
-Per default Wrap uses the property names of a type as its encoding keys, but sometimes this is not what you’re looking for. You can choose to override any or all of a type’s encoding keys by making it conform to `WrapCustomizable` and implementing `keyForWrappingPropertyNamed`, like this:
+Per default Wrap uses the property names of a type as its encoding keys, but sometimes this is not what you’re looking for. You can choose to override any or all of a type’s encoding keys by making it conform to `WrapCustomizable` and implementing `keyForWrapping(propertyNamed:)`, like this:
 
 ```swift
 struct Book: WrapCustomizable {
     let title: String
     let authorName: String
 
-    func keyForWrappingPropertyNamed(propertyName: String) -> String? {
+    func keyForWrapping(propertyNamed propertyName: String) -> String? {
         if propertyName == "authorName" {
             return "author_name"
         }
@@ -135,7 +135,7 @@ struct Book: WrapCustomizable {
 }
 ```
 
-You can also use the `keyForWrappingPropertyNamed()` API to skip a property entirely, by returning nil from this method for it.
+You can also use the `keyForWrapping(propertyNamed:)` API to skip a property entirely, by returning nil from this method for it.
 
 #### Custom key types
 
@@ -149,7 +149,7 @@ For some nested types, you might want to handle the wrapping yourself. This may 
 struct Library: WrapCustomizable {
     private let booksByID: [String : Book]
 
-    func wrap() -> AnyObject? {
+    func wrap() -> Any? {
         return Wrapper().wrap(self.booksByID)
     }
 }
@@ -163,13 +163,13 @@ Non-raw type `enum` values are also automatically encoded. The default behavior 
 
 ```swift
 enum Profession {
-    case Developer(favoriteLanguageName: String)
-    case Lawyer
+    case developer(favoriteLanguageName: String)
+    case lawyer
 }
 
 struct Person {
-    let profession = Profession.Developer(favoriteLanguageName: "Swift")
-    let hobbyProfession = Profession.Lawyer
+    let profession = Profession.developer(favoriteLanguageName: "Swift")
+    let hobbyProfession = Profession.lawyer
 }
 ```
 
@@ -178,9 +178,9 @@ Encodes into:
 ```json
 {
     "profession": {
-        "Developer": "Swift"
+        "developer": "Swift"
     },
-    "hobbyProfession": "Lawyer"
+    "hobbyProfession": "lawyer"
 }
 ```
 
