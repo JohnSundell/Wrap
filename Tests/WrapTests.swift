@@ -11,7 +11,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "string" : "A string",
                 "int" : 15,
                 "double" : 7.6
@@ -29,7 +29,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "string" : "A string",
                 "int" : 5
             ])
@@ -51,7 +51,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "constantString" : "A string",
                 "mutableInt" : 15,
                 "nested": [
@@ -71,9 +71,9 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Enum.First), againstDictionary: [:])
+            try Verify(dictionary: wrap(Enum.First), againstDictionary: [:])
             
-            try Verify(dictionary: Wrap(Enum.Second("Hello")), againstDictionary: [
+            try Verify(dictionary: wrap(Enum.Second("Hello")), againstDictionary: [
                 "Second" : "Hello"
             ])
         } catch {
@@ -109,7 +109,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "first" : "First",
                 "second" : [
                     "Second" : "Hello"
@@ -141,12 +141,12 @@ class WrapTests: XCTestCase {
         do {
             let model = Model(date: date, nsDate: nsDate)
             
-            try Verify(dictionary: Wrap(model, dateFormatter: dateFormatter), againstDictionary: [
+            try Verify(dictionary: wrap(model, dateFormatter: dateFormatter), againstDictionary: [
                 "date" : dateFormatter.string(from: date),
                 "nsDate" : dateFormatter.string(from: nsDate as Date)
             ])
         } catch {
-            XCTFail("\(try! Wrap(Model(date: date, nsDate: nsDate), dateFormatter: dateFormatter) as WrappedDictionary)")
+            XCTFail("\(try! wrap(Model(date: date, nsDate: nsDate), dateFormatter: dateFormatter) as WrappedDictionary)")
             XCTFail(error.toString())
         }
     }
@@ -155,7 +155,7 @@ class WrapTests: XCTestCase {
         struct Empty {}
         
         do {
-            try Verify(dictionary: Wrap(Empty()), againstDictionary: [:])
+            try Verify(dictionary: wrap(Empty()), againstDictionary: [:])
         } catch {
             XCTFail(error.toString())
         }
@@ -174,7 +174,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "empty" : [:],
                 "emptyWithOptional" : [:]
             ])
@@ -190,7 +190,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "homogeneous" : ["Wrap", "Tests"],
                 "mixed" : ["Wrap", 15, 8.3]
             ])
@@ -218,7 +218,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "homogeneous" : [
                     "Key1" : "Value1",
                     "Key2" : "Value2"
@@ -245,7 +245,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "homogeneous" : ["Wrap", "Tests"],
                 "mixed" : ["Wrap", 15, 8.3]
             ])
@@ -261,7 +261,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "optionalURL" : "http://github.com",
                 "URL" : "http://google.com"
             ])
@@ -282,7 +282,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Subclass()), againstDictionary: [
+            try Verify(dictionary: wrap(Subclass()), againstDictionary: [
                 "string1" : "String1",
                 "string2" : "String2",
                 "int1" : 1,
@@ -300,7 +300,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "string" : "String",
                 "double" : 7.14
             ])
@@ -320,7 +320,7 @@ class WrapTests: XCTestCase {
         ]
         
         do {
-            try Verify(dictionary: Wrap(dictionary), againstDictionary: [
+            try Verify(dictionary: wrap(dictionary), againstDictionary: [
                 "model1" : [
                     "string" : "First"
                 ],
@@ -343,7 +343,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "nested" : [
                     "string" : "Nested model"
                 ]
@@ -370,7 +370,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            let wrapped: WrappedDictionary = try Wrap(Model())
+            let wrapped: WrappedDictionary = try wrap(Model())
             
             if let nested = wrapped["nested"] as? [WrappedDictionary] {
                 XCTAssertEqual(nested.count, 2)
@@ -406,7 +406,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "nested" : [
                     "model" : [
                         "string" : "Hello"
@@ -433,7 +433,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "superclass" : [
                     "string1" : "String1"
                 ],
@@ -463,7 +463,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            let wrappedDictionary :WrappedDictionary = try Wrap(FirstModel())
+            let wrappedDictionary :WrappedDictionary = try wrap(FirstModel())
             try Verify(dictionary: wrappedDictionary, againstDictionary: [
                 "string" : "First String",
                 "nestedDictionary" : [
@@ -488,7 +488,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "string" : "Hello",
                 "number" : 17,
                 "array" : ["Unwrap"]
@@ -516,7 +516,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "dictionary" : [
                     "15" : "First value",
                     "19" : "Second value"
@@ -547,7 +547,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "string" : "Default",
                 "totallyCustomized" : "I'm customized"
             ])
@@ -568,7 +568,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "custom" : "A value"
             ])
         } catch {
@@ -592,7 +592,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "int" : 27,
                 "custom" : "A value"
             ])
@@ -617,7 +617,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            try Verify(dictionary: Wrap(Model()), againstDictionary: [
+            try Verify(dictionary: wrap(Model()), againstDictionary: [
                 "string" : "Hello",
                 "int" : 27
             ])
@@ -634,7 +634,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            _ = try Wrap(Model()) as WrappedDictionary
+            _ = try wrap(Model()) as WrappedDictionary
             XCTFail("Should have thrown")
         } catch WrapError.wrappingFailedForObject(let object) {
             XCTAssertTrue(object is Model)
@@ -653,7 +653,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            _ = try Wrap(Model()) as WrappedDictionary
+            _ = try wrap(Model()) as WrappedDictionary
             XCTFail("Should have thrown")
         } catch WrapError.wrappingFailedForObject(let object) {
             XCTAssertTrue(object is Model)
@@ -664,7 +664,7 @@ class WrapTests: XCTestCase {
     
     func testInvalidRootObjectThrows() {
         do {
-            _ = try Wrap("A string") as WrappedDictionary
+            _ = try wrap("A string") as WrappedDictionary
         } catch WrapError.invalidTopLevelObject(let object) {
             XCTAssertEqual((object as? String) ?? "", "A string")
         } catch {
@@ -680,7 +680,7 @@ class WrapTests: XCTestCase {
         }
         
         do {
-            let data: Data = try Wrap(Model())
+            let data: Data = try wrap(Model())
             let object = try JSONSerialization.jsonObject(with: data, options: [])
             
             guard let dictionary = object as? WrappedDictionary else {
@@ -704,7 +704,7 @@ class WrapTests: XCTestCase {
         
         do {
             let models = [Model(string: "A"), Model(string: "B"), Model(string: "C")]
-            let wrapped: [WrappedDictionary] = try Wrap(models)
+            let wrapped: [WrappedDictionary] = try wrap(models)
             XCTAssertEqual(wrapped.count, 3)
             
             try Verify(dictionary: wrapped[0], againstDictionary: ["string" : "A"])

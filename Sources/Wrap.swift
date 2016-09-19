@@ -69,35 +69,35 @@ public typealias WrappedDictionary = [String : Any]
  *
  *  See also `WrappableKey` (for dictionary keys) and `WrappableEnum` for Enum values.
  */
-public func Wrap<T>(_ object: T, dateFormatter: DateFormatter? = nil) throws -> WrappedDictionary {
+public func wrap<T>(_ object: T, dateFormatter: DateFormatter? = nil) throws -> WrappedDictionary {
     return try Wrapper(dateFormatter: dateFormatter).wrap(object: object, enableCustomizedWrapping: true)
 }
 
 /**
- *  Alternative `Wrap()` overload that returns JSON-based `Data`
+ *  Alternative `wrap()` overload that returns JSON-based `Data`
  *
- *  See the documentation for the dictionary-based `Wrap()` function for more information
+ *  See the documentation for the dictionary-based `wrap()` function for more information
  */
-public func Wrap<T>(_ object: T, writingOptions: JSONSerialization.WritingOptions? = nil, dateFormatter: DateFormatter? = nil) throws -> Data {
+public func wrap<T>(_ object: T, writingOptions: JSONSerialization.WritingOptions? = nil, dateFormatter: DateFormatter? = nil) throws -> Data {
     return try Wrapper(dateFormatter: dateFormatter).wrap(object: object, writingOptions: writingOptions ?? [])
 }
 
 /**
- *  Alternative `Wrap()` overload that encodes an array of objects into an array of dictionaries
+ *  Alternative `wrap()` overload that encodes an array of objects into an array of dictionaries
  *
- *  See the documentation for the dictionary-based `Wrap()` function for more information
+ *  See the documentation for the dictionary-based `wrap()` function for more information
  */
-public func Wrap<T>(_ objects: [T], dateFormatter: DateFormatter? = nil) throws -> [WrappedDictionary] {
-    return try objects.map({ try Wrap($0) })
+public func wrap<T>(_ objects: [T], dateFormatter: DateFormatter? = nil) throws -> [WrappedDictionary] {
+    return try objects.map({ try wrap($0) })
 }
 
 /**
- *  Alternative `Wrap()` overload that encodes an array of objects into JSON-based `Data`
+ *  Alternative `wrap()` overload that encodes an array of objects into JSON-based `Data`
  *
- *  See the documentation for the dictionary-based `Wrap()` function for more information
+ *  See the documentation for the dictionary-based `wrap()` function for more information
  */
-public func Wrap<T>(_ objects: [T], writingOptions: JSONSerialization.WritingOptions? = nil, dateFormatter: DateFormatter? = nil) throws -> Data {
-    let dictionaries: [WrappedDictionary] = try Wrap(objects)
+public func wrap<T>(_ objects: [T], writingOptions: JSONSerialization.WritingOptions? = nil, dateFormatter: DateFormatter? = nil) throws -> Data {
+    let dictionaries: [WrappedDictionary] = try wrap(objects)
     return try JSONSerialization.data(withJSONObject: dictionaries as AnyObject, options: writingOptions ?? [])
 }
 
@@ -114,7 +114,7 @@ public protocol WrapCustomizable {
      *  All top-level types should return a `WrappedDictionary` from this method.
      *
      *  You may use the default wrapping implementation by using a `Wrapper`, but
-     *  never call `Wrap()` from an implementation of this method, since that might
+     *  never call `wrap()` from an implementation of this method, since that might
      *  cause an infinite recursion.
      *
      *  Returning nil from this method will be treated as an error, and cause
@@ -140,7 +140,7 @@ public protocol WrapCustomizable {
      *
      *  If you encounter an error while attempting to wrap the property in question,
      *  you can choose to throw. This will cause a WrapError.WrappingFailedForObject
-     *  to be thrown from the main `Wrap()` call that started the process.
+     *  to be thrown from the main `wrap()` call that started the process.
      */
     func wrap(propertyNamed propertyName: String, originalValue: Any) throws -> Any?
 }
@@ -170,7 +170,7 @@ public protocol WrappableDate {
  *  Class used to wrap an object or value. Use this in any custom `wrap()` implementations
  *  in case you only want to add on top of the default implementation.
  *
- *  You normally don't have to interact with this API. Use the `Wrap()` function instead
+ *  You normally don't have to interact with this API. Use the `wrap()` function instead
  *  to wrap an object from top-level code.
  */
 public class Wrapper {
