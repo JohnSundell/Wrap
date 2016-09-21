@@ -137,6 +137,30 @@ struct Book: WrapCustomizable {
 
 You can also use the `keyForWrappingPropertyNamed()` API to skip a property entirely, by returning nil from this method for it.
 
+Wrap also provides an implementation of transforming keys from camel case to snake case:
+
+```swift
+struct Book {
+    let title: String
+    let nrOfPages: Int
+    let authorName: String
+    let pictureURL: String?
+}
+
+extension Book: WrapToSnakeCase {}
+```
+
+This will produce the following dictionary when wrapped:
+
+```json
+{
+    "title": "Game of Thrones", 
+    "nr_of_pages": 694,
+    "author_name": "George R. R. Martin",
+    "picture_url": "http://t0.gstatic.com/images?q=tbn:ANd9GcSQl7Kuali9GsWHGLzKX-IvP6tn3T1Pd_qDgMIzloF7gT_t8fAu"
+}
+```
+
 #### Custom key types
 
 You might have nested dictionaries that are not keyed on `Strings`, and for those Wrap provides the `WrappableKey` protocol. This enables you to easily convert any type into a string that can be used as a JSON key.

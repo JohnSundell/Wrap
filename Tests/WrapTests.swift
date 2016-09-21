@@ -713,6 +713,29 @@ class WrapTests: XCTestCase {
     }
 }
 
+// MARK: - Custom Wrap Key Transformations
+
+class WrapToSnakeCaseTests: XCTestCase {
+
+    func test_correctly_wraps_to_snake_case() {
+        struct Book: WrapToSnakeCase {
+            let title: String
+            let nrOfPages: Int
+            let authorName: String
+            let pictureURL: String?
+        }
+        
+        let request = Book(title: "Game of Thrones", nrOfPages: 694, authorName: "George R. R. Martin", pictureURL: "http://www.example.com/got.png")
+        
+        let parameters: [String: AnyObject] = try! Wrap(request)
+        
+        let keys = Set(parameters.keys)
+        
+        XCTAssertEqual(keys, Set(["title", "nr_of_pages", "author_name", "picture_url"]))
+    }
+}
+
+
 // MARK: - Mocks
 
 private protocol MockProtocol {
