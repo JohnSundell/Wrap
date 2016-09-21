@@ -598,7 +598,7 @@ class WrapTests: XCTestCase {
         struct Model: WrapCustomizable {
             let string = "A string"
             
-            func wrap(dateFormatter: DateFormatter?) -> Any? {
+            func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
                 return [
                     "custom" : "A value"
                 ]
@@ -618,7 +618,7 @@ class WrapTests: XCTestCase {
         struct Model: WrapCustomizable {
             let int = 27
             
-            func wrap(dateFormatter: DateFormatter?) -> Any? {
+            func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
                 do {
                     var wrapped = try Wrapper().wrap(object: self)
                     wrapped["custom"] = "A value"
@@ -644,7 +644,7 @@ class WrapTests: XCTestCase {
             let string = "Hello"
             let int = 16
             
-            func wrap(propertyNamed propertyName: String, originalValue: Any, dateFormatter: DateFormatter?) throws -> Any? {
+            func wrap(propertyNamed propertyName: String, originalValue: Any, context: Any?, dateFormatter: DateFormatter?) throws -> Any? {
                 if propertyName == "int" {
                     XCTAssertEqual((originalValue as? Int) ?? 0, self.int)
                     return 27
@@ -666,7 +666,7 @@ class WrapTests: XCTestCase {
     
     func testCustomWrappingFailureThrows() {
         struct Model: WrapCustomizable {
-            func wrap(dateFormatter: DateFormatter?) -> Any? {
+            func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
                 return nil
             }
         }
@@ -685,7 +685,7 @@ class WrapTests: XCTestCase {
         struct Model: WrapCustomizable {
             let string = "A string"
             
-            func wrap(propertyNamed propertyName: String, originalValue: Any, dateFormatter: DateFormatter?) throws -> Any? {
+            func wrap(propertyNamed propertyName: String, originalValue: Any, context: Any?, dateFormatter: DateFormatter?) throws -> Any? {
                 throw NSError(domain: "ERROR", code: 0, userInfo: nil)
             }
         }
@@ -773,6 +773,50 @@ class WrapTests: XCTestCase {
                 "_underscored" : "underscored name",
                 "center_underscored" : "center underscored name",
                 "double__underscored" : "double underscored name"
+            ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+    
+    func testContext() {
+        struct NestedModel: WrapCustomizable {
+            let string = "String"
+            
+            func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
+                XCTAssertEqual(context as! String, "Context")
+                return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(object: self)
+            }
+            
+            func wrap(propertyNamed propertyName: String, originalValue: Any, context: Any?, dateFormatter: DateFormatter?) throws -> Any? {
+                XCTAssertEqual(context as! String, "Context")
+                return context
+            }
+        }
+        
+        class RootModel: WrapCustomizable {
+            let string = "String"
+            let nestedArray = [NestedModel()]
+            let nestedDictionary = ["nested" : NestedModel()]
+        }
+        
+        class Model: RootModel {
+            func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
+                XCTAssertEqual(context as! String, "Context")
+                return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(object: self)
+            }
+            
+            func wrap(propertyNamed propertyName: String, originalValue: Any, context: Any?, dateFormatter: DateFormatter?) throws -> Any? {
+                XCTAssertEqual(context as! String, "Context")
+                return try super.wrap(propertyNamed: propertyName, originalValue: originalValue, context: context, dateFormatter: dateFormatter)
+            }
+        }
+        
+        do {
+            try verify(dictionary: wrap(Model(), context: "Context"), againstDictionary: [
+                "string" : "String",
+                "nestedArray" : [["string" : "Context"]],
+                "nestedDictionary" : ["nested" : ["string" : "Context"]]
             ])
         } catch {
             XCTFail(error.toString())

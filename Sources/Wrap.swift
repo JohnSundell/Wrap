@@ -34,6 +34,9 @@ public typealias WrappedDictionary = [String : Any]
  *  Wrap any object or value, encoding it into a JSON compatible Dictionary
  *
  *  - Parameter object: The object to encode
+ *  - Parameter context: An optional contextual object that will be available throughout
+ *    the wrapping process. Can be used to inject extra information or objects needed to
+ *    perform the wrapping.
  *  - Parameter dateFormatter: Optionally pass in a date formatter to use to encode any
  *    `NSDate` values found while encoding the object. If this is `nil`, any found date
  *    values will be encoded using the "yyyy-MM-dd HH:mm:ss" format.
@@ -69,8 +72,8 @@ public typealias WrappedDictionary = [String : Any]
  *
  *  See also `WrappableKey` (for dictionary keys) and `WrappableEnum` for Enum values.
  */
-public func wrap<T>(_ object: T, dateFormatter: DateFormatter? = nil) throws -> WrappedDictionary {
-    return try Wrapper(dateFormatter: dateFormatter).wrap(object: object, enableCustomizedWrapping: true)
+public func wrap<T>(_ object: T, context: Any? = nil, dateFormatter: DateFormatter? = nil) throws -> WrappedDictionary {
+    return try Wrapper(context: context, dateFormatter: dateFormatter).wrap(object: object, enableCustomizedWrapping: true)
 }
 
 /**
@@ -78,8 +81,8 @@ public func wrap<T>(_ object: T, dateFormatter: DateFormatter? = nil) throws -> 
  *
  *  See the documentation for the dictionary-based `wrap()` function for more information
  */
-public func wrap<T>(_ object: T, writingOptions: JSONSerialization.WritingOptions? = nil, dateFormatter: DateFormatter? = nil) throws -> Data {
-    return try Wrapper(dateFormatter: dateFormatter).wrap(object: object, writingOptions: writingOptions ?? [])
+public func wrap<T>(_ object: T, writingOptions: JSONSerialization.WritingOptions? = nil, context: Any? = nil, dateFormatter: DateFormatter? = nil) throws -> Data {
+    return try Wrapper(context: context, dateFormatter: dateFormatter).wrap(object: object, writingOptions: writingOptions ?? [])
 }
 
 /**
@@ -87,8 +90,8 @@ public func wrap<T>(_ object: T, writingOptions: JSONSerialization.WritingOption
  *
  *  See the documentation for the dictionary-based `wrap()` function for more information
  */
-public func wrap<T>(_ objects: [T], dateFormatter: DateFormatter? = nil) throws -> [WrappedDictionary] {
-    return try objects.map({ try wrap($0) })
+public func wrap<T>(_ objects: [T], context: Any? = nil, dateFormatter: DateFormatter? = nil) throws -> [WrappedDictionary] {
+    return try objects.map { try wrap($0, context: context, dateFormatter: dateFormatter) }
 }
 
 /**
@@ -96,8 +99,8 @@ public func wrap<T>(_ objects: [T], dateFormatter: DateFormatter? = nil) throws 
  *
  *  See the documentation for the dictionary-based `wrap()` function for more information
  */
-public func wrap<T>(_ objects: [T], writingOptions: JSONSerialization.WritingOptions? = nil, dateFormatter: DateFormatter? = nil) throws -> Data {
-    let dictionaries: [WrappedDictionary] = try wrap(objects)
+public func wrap<T>(_ objects: [T], writingOptions: JSONSerialization.WritingOptions? = nil, context: Any? = nil, dateFormatter: DateFormatter? = nil) throws -> Data {
+    let dictionaries: [WrappedDictionary] = try wrap(objects, context: context)
     return try JSONSerialization.data(withJSONObject: dictionaries as AnyObject, options: writingOptions ?? [])
 }
 
@@ -133,13 +136,13 @@ public protocol WrapCustomizable {
      *  never call `wrap()` from an implementation of this method, since that might
      *  cause an infinite recursion.
      *
-     *  The dateFormatter passed to this method is any formatter that you supplied
-     *  when initiating the wrapping process by calling `wrap()`.
+     *  The context & dateFormatter passed to this method is any formatter that you
+     *  supplied when initiating the wrapping process by calling `wrap()`.
      *
      *  Returning nil from this method will be treated as an error, and cause
      *  a `WrapError.wrappingFailedForObject()` error to be thrown.
      */
-    func wrap(dateFormatter: DateFormatter?) -> Any?
+    func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any?
     /**
      *  Override the key that will be used when encoding a certain property
      *
@@ -164,7 +167,7 @@ public protocol WrapCustomizable {
      *  you can choose to throw. This will cause a WrapError.WrappingFailedForObject
      *  to be thrown from the main `wrap()` call that started the process.
      */
-    func wrap(propertyNamed propertyName: String, originalValue: Any, dateFormatter: DateFormatter?) throws -> Any?
+    func wrap(propertyNamed propertyName: String, originalValue: Any, context: Any?, dateFormatter: DateFormatter?) throws -> Any?
 }
 
 /// Protocol implemented by types that may be used as keys in a wrapped Dictionary
@@ -196,16 +199,21 @@ public protocol WrappableDate {
  *  to wrap an object from top-level code.
  */
 public class Wrapper {
+    fileprivate let context: Any?
     fileprivate var dateFormatter: DateFormatter?
     
     /**
-     *  Initialize an instance of this class, optionally with a date formatter
+     *  Initialize an instance of this class
      *
-     *  - Paramter dateFormatter: Any specific date formatter to use to encode any found `NSDate`
-     *  values. If this is `nil`, any found date values will be encoded using the "yyyy-MM-dd
-     *  HH:mm:ss" format.
+     *  - Parameter context: An optional contextual object that will be available throughout the
+     *    wrapping process. Can be used to inject extra information or objects needed to perform
+     *    the wrapping.
+     *  - Parameter dateFormatter: Any specific date formatter to use to encode any found `NSDate`
+     *    values. If this is `nil`, any found date values will be encoded using the "yyyy-MM-dd
+     *    HH:mm:ss" format.
      */
-    public init(dateFormatter: DateFormatter? = nil) {
+    public init(context: Any? = nil, dateFormatter: DateFormatter? = nil) {
+        self.context = context
         self.dateFormatter = dateFormatter
     }
     
@@ -231,8 +239,8 @@ public extension WrapCustomizable {
         return .matchPropertyName
     }
     
-    func wrap(dateFormatter: DateFormatter?) -> Any? {
-        return try? Wrapper(dateFormatter: dateFormatter).wrap(object: self)
+    func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
+        return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(object: self)
     }
     
     func keyForWrapping(propertyNamed propertyName: String) -> String? {
@@ -244,8 +252,8 @@ public extension WrapCustomizable {
         }
     }
     
-    func wrap(propertyNamed propertyName: String, originalValue: Any, dateFormatter: DateFormatter?) throws -> Any? {
-        return try Wrapper(dateFormatter: dateFormatter).wrap(value: originalValue, propertyName: propertyName)
+    func wrap(propertyNamed propertyName: String, originalValue: Any, context: Any?, dateFormatter: DateFormatter?) throws -> Any? {
+        return try Wrapper(context: context, dateFormatter: dateFormatter).wrap(value: originalValue, propertyName: propertyName)
     }
 }
 
@@ -262,71 +270,71 @@ public extension WrapCustomizable {
 
 /// Extension providing a default wrapping implementation for `RawRepresentable` Enums
 public extension WrappableEnum where Self: RawRepresentable {
-    public func wrap(dateFormatter: DateFormatter?) -> Any? {
+    public func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
         return self.rawValue as AnyObject
     }
 }
 
 /// Extension customizing how Arrays are wrapped
 extension Array: WrapCustomizable {
-    public func wrap(dateFormatter: DateFormatter?) -> Any? {
-        return try? Wrapper().wrap(collection: self)
+    public func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
+        return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(collection: self)
     }
 }
 
 /// Extension customizing how Dictionaries are wrapped
 extension Dictionary: WrapCustomizable {
-    public func wrap(dateFormatter: DateFormatter?) -> Any? {
-        return try? Wrapper().wrap(dictionary: self)
+    public func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
+        return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(dictionary: self)
     }
 }
 
 /// Extension customizing how Sets are wrapped
 extension Set: WrapCustomizable {
-    public func wrap(dateFormatter: DateFormatter?) -> Any? {
-        return try? Wrapper().wrap(collection: self)
+    public func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
+        return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(collection: self)
     }
 }
 
 /// Extension customizing how Int64s are wrapped, ensuring compatbility with 32 bit systems
 extension Int64: WrapCustomizable {
-    public func wrap(dateFormatter: DateFormatter?) -> Any? {
+    public func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
         return NSNumber(value: self)
     }
 }
 
 /// Extension customizing how UInt64s are wrapped, ensuring compatbility with 32 bit systems
 extension UInt64: WrapCustomizable {
-    public func wrap(dateFormatter: DateFormatter?) -> Any? {
+    public func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
         return NSNumber(value: self)
     }
 }
 
 /// Extension customizing how NSStrings are wrapped
 extension NSString: WrapCustomizable {
-    public func wrap(dateFormatter: DateFormatter?) -> Any? {
+    public func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
         return self
     }
 }
 
 /// Extension customizing how NSURLs are wrapped
 extension NSURL: WrapCustomizable {
-    public func wrap(dateFormatter: DateFormatter?) -> Any? {
+    public func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
         return self.absoluteString
     }
 }
 
 /// Extension customizing how NSArrays are wrapped
 extension NSArray: WrapCustomizable {
-    public func wrap(dateFormatter: DateFormatter?) -> Any? {
-        return try? Wrapper().wrap(collection: Array(self))
+    public func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
+        return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(collection: Array(self))
     }
 }
 
 /// Extension customizing how NSDictionaries are wrapped
 extension NSDictionary: WrapCustomizable {
-    public func wrap(dateFormatter: DateFormatter?) -> Any? {
-        return try? Wrapper().wrap(dictionary: self as [NSObject : AnyObject]) as AnyObject
+    public func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
+        return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(dictionary: self as [NSObject : AnyObject]) as AnyObject
     }
 }
 
@@ -397,7 +405,7 @@ private extension Wrapper {
         if mirror.children.isEmpty {
             if mirror.displayStyle == .enum {
                 if let wrappableEnum = value as? WrappableEnum {
-                    if let wrapped = wrappableEnum.wrap(dateFormatter: self.dateFormatter) {
+                    if let wrapped = wrappableEnum.wrap(context: self.context, dateFormatter: self.dateFormatter) {
                         return wrapped
                     }
                     
@@ -421,7 +429,7 @@ private extension Wrapper {
     
     func wrap<T: Collection>(collection: T) throws -> [Any] {
         var wrappedArray = [Any]()
-        let wrapper = Wrapper()
+        let wrapper = Wrapper(context: self.context, dateFormatter: self.dateFormatter)
         
         for element in collection {
             let wrapped = try wrapper.wrap(value: element)
@@ -433,7 +441,7 @@ private extension Wrapper {
     
     func wrap<K: Hashable, V>(dictionary: [K : V]) throws -> WrappedDictionary {
         var wrappedDictionary = WrappedDictionary()
-        let wrapper = Wrapper()
+        let wrapper = Wrapper(context: self.context, dateFormatter: self.dateFormatter)
         
         for (key, value) in dictionary {
             let wrappedKey: String?
@@ -493,7 +501,7 @@ private extension Wrapper {
                 }
                 
                 if let wrappingKey = wrappingKey {
-                    if let wrappedProperty = try customizable?.wrap(propertyNamed: propertyName, originalValue: property.value, dateFormatter: self.dateFormatter) {
+                    if let wrappedProperty = try customizable?.wrap(propertyNamed: propertyName, originalValue: property.value, context: self.context, dateFormatter: self.dateFormatter) {
                         wrappedDictionary[wrappingKey] = wrappedProperty
                     } else {
                         wrappedDictionary[wrappingKey] = try self.wrap(value: property.value, propertyName: propertyName)
@@ -506,7 +514,7 @@ private extension Wrapper {
     }
     
     func performCustomWrapping(object: WrapCustomizable) throws -> Any {
-        guard let wrapped = object.wrap(dateFormatter: self.dateFormatter) else {
+        guard let wrapped = object.wrap(context: self.context, dateFormatter: self.dateFormatter) else {
             throw WrapError.wrappingFailedForObject(object)
         }
         
