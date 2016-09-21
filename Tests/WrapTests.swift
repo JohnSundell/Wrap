@@ -270,6 +270,24 @@ class WrapTests: XCTestCase {
         }
     }
     
+    func test64BitIntegerProperties() {
+        struct Model {
+            let int = Int64.max
+            let uint = UInt64.max
+        }
+        
+        do {
+            let dictionary = try JSONSerialization.jsonObject(with: wrap(Model()), options: []) as! WrappedDictionary
+            
+            try verify(dictionary: dictionary, againstDictionary: [
+                "int" : Int64.max,
+                "uint" : UInt64.max
+            ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+    
     func testRootSubclass() {
         class Superclass {
             let string1 = "String1"
@@ -744,6 +762,26 @@ extension Int: Verifiable {
         }
         
         return Int(number)
+    }
+}
+
+extension Int64: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> Int64? {
+        guard let number = object as? NSNumber else {
+            return nil
+        }
+        
+        return number.int64Value
+    }
+}
+
+extension UInt64: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> UInt64? {
+        guard let number = object as? NSNumber else {
+            return nil
+        }
+        
+        return number.uint64Value
     }
 }
 

@@ -246,6 +246,20 @@ extension Set: WrapCustomizable {
     }
 }
 
+/// Extension customizing how Int64s are wrapped, ensuring compatbility with 32 bit systems
+extension Int64: WrapCustomizable {
+    public func wrap() -> Any? {
+        return NSNumber(value: self)
+    }
+}
+
+/// Extension customizing how UInt64s are wrapped, ensuring compatbility with 32 bit systems
+extension UInt64: WrapCustomizable {
+    public func wrap() -> Any? {
+        return NSNumber(value: self)
+    }
+}
+
 /// Extension customizing how NSStrings are wrapped
 extension NSString: WrapCustomizable {
     public func wrap() -> Any? {
