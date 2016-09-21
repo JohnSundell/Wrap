@@ -147,7 +147,7 @@ If you want the dictionary that Wrap produces to have snake_cased keys rather th
 
 #### Customized wrapping
 
-For some nested types, you might want to handle the wrapping yourself. This may be especially true for any custom collections, or types that have a completely different representation when encoded. To do that, make a type conform to `WrapCustomizable` and implement `wrap()`, like this:
+For some nested types, you might want to handle the wrapping yourself. This may be especially true for any custom collections, or types that have a completely different representation when encoded. To do that, make a type conform to `WrapCustomizable` and implement `wrap(context:dateFormatter:)`, like this:
 
 ```swift
 struct Library: WrapCustomizable {
@@ -185,6 +185,28 @@ Encodes into:
         "developer": "Swift"
     },
     "hobbyProfession": "lawyer"
+}
+```
+
+### Contextual objects
+
+To be able to easily encode any dependencies that you might want to use during the encoding process, Wrap provides the ability to supply a contextual object when initiating the wrapping process (by calling `wrap(object, context: myContext`).
+
+A context can be of `Any` type and is accessible in all `WrapCustomizable` wrapping methods. Here is an example, where we send in a prefix to add to a `Book`’s `title`:
+
+```swift
+struct Book: WrapCustomizable {
+    let title: String
+    
+    func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
+        guard let prefix = context as? String else {
+            return nil
+        }
+        
+        return [
+            "title" : prefix + self.title
+        ]
+    }
 }
 ```
 
