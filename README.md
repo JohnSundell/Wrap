@@ -141,6 +141,10 @@ You can also use the `keyForWrapping(propertyNamed:)` API to skip a property ent
 
 You might have nested dictionaries that are not keyed on `Strings`, and for those Wrap provides the `WrappableKey` protocol. This enables you to easily convert any type into a string that can be used as a JSON key.
 
+#### Encoding keys as snake_case
+
+If you want the dictionary that Wrap produces to have snake_cased keys rather than the default (which is matching the names of the properties that were encoded), you can easily do so by conforming to `WrapCustomizable` and returning `.convertToSnakeCase` from the `wrapKeyStyle` property. Doing that will, for example, convert the property name `myProperty` into the key `my_property`.
+
 #### Customized wrapping
 
 For some nested types, you might want to handle the wrapping yourself. This may be especially true for any custom collections, or types that have a completely different representation when encoded. To do that, make a type conform to `WrapCustomizable` and implement `wrap()`, like this:
@@ -149,8 +153,8 @@ For some nested types, you might want to handle the wrapping yourself. This may 
 struct Library: WrapCustomizable {
     private let booksByID: [String : Book]
 
-    func wrap() -> Any? {
-        return Wrapper().wrap(self.booksByID)
+    func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
+        return Wrapper(context: context, dateFormatter: dateFormatter).wrap(self.booksByID)
     }
 }
 ```
