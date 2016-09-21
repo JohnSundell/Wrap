@@ -101,6 +101,15 @@ public func wrap<T>(_ objects: [T], writingOptions: JSONSerialization.WritingOpt
     return try JSONSerialization.data(withJSONObject: dictionaries as AnyObject, options: writingOptions ?? [])
 }
 
+// Enum describing various styles of keys in a wrapped dictionary
+public enum WrapKeyStyle {
+    /// The keys in a dictionary produced by Wrap should match their property name (default)
+    case matchPropertyName
+    /// The keys in a dictionary produced by Wrap should be converted to snake_case.
+    /// For example, "myProperty" will be converted to "my_property". All keys will be lowercased.
+    case convertToSnakeCase
+}
+
 /**
  *  Protocol providing the main customization point for Wrap
  *
@@ -108,6 +117,13 @@ public func wrap<T>(_ objects: [T], writingOptions: JSONSerialization.WritingOpt
  *  supplies default implementations of them.
  */
 public protocol WrapCustomizable {
+    /**
+     *  The style that wrap should apply to the keys of a wrapped dictionary
+     *
+     *  The value of this property is ignored if a type provides a custom
+     *  implementation of the `keyForWrapping(propertyNamed:)` method.
+     */
+    var wrapKeyStyle: WrapKeyStyle { get }
     /**
      *  Override the wrapping process for this type
      *
@@ -211,16 +227,36 @@ public enum WrapError: Error {
 
 /// Extension containing default implementations of `WrapCustomizable`. Override as you see fit.
 public extension WrapCustomizable {
+    var wrapKeyStyle: WrapKeyStyle {
+        return .matchPropertyName
+    }
+    
     func wrap(dateFormatter: DateFormatter?) -> Any? {
         return try? Wrapper(dateFormatter: dateFormatter).wrap(object: self)
     }
     
     func keyForWrapping(propertyNamed propertyName: String) -> String? {
-        return propertyName
+        switch self.wrapKeyStyle {
+        case .matchPropertyName:
+            return propertyName
+        case .convertToSnakeCase:
+            return self.convertPropertyNameToSnakeCase(propertyName: propertyName)
+        }
     }
     
     func wrap(propertyNamed propertyName: String, originalValue: Any, dateFormatter: DateFormatter?) throws -> Any? {
         return try Wrapper(dateFormatter: dateFormatter).wrap(value: originalValue, propertyName: propertyName)
+    }
+}
+
+/// Extension adding convenience APIs to `WrapCustomizable` types
+public extension WrapCustomizable {
+    /// Convert a given property name (assumed to be camelCased) to snake_case
+    func convertPropertyNameToSnakeCase(propertyName: String) -> String {
+        let regex = try! NSRegularExpression(pattern: "(?<=[a-z])([A-Z])|([A-Z])(?=[a-z])", options: [])
+        let range = NSRange(location: 0, length: propertyName.characters.count)
+        let camelCasePropertyName = regex.stringByReplacingMatches(in: propertyName, options: [], range: range, withTemplate: "_$1$2")
+        return camelCasePropertyName.lowercased()
     }
 }
 

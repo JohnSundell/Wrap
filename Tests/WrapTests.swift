@@ -752,6 +752,32 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
+    
+    func testSnakeCasedKeyWrapping() {
+        struct Model: WrapCustomizable {
+            var wrapKeyStyle: WrapKeyStyle { return .convertToSnakeCase }
+            
+            let simple = "simple name"
+            let camelCased = "camel cased name"
+            let CAPITALIZED = "capitalized name"
+            let _underscored = "underscored name"
+            let center_underscored = "center underscored name"
+            let double__underscored = "double underscored name"
+        }
+        
+        do {
+            try verify(dictionary: wrap(Model()), againstDictionary: [
+                "simple" : "simple name",
+                "camel_cased" : "camel cased name",
+                "capitalized" : "capitalized name",
+                "_underscored" : "underscored name",
+                "center_underscored" : "center underscored name",
+                "double__underscored" : "double underscored name"
+            ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
 }
 
 // MARK: - Mocks
