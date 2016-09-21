@@ -895,7 +895,7 @@ private func verify(array: [Any], againstArray expectedArray: [Any]) throws {
     }
 }
 
-private func verify(value: Any, againstValue expectedValue: Any) throws {
+private func verify(value: Any, againstValue expectedValue: Any, convertToObjectiveCObjectIfNeeded: Bool = true) throws {
     guard let expectedVerifiableValue = expectedValue as? Verifiable else {
         throw VerificationError.cannotVerifyValue(expectedValue)
     }
@@ -905,14 +905,16 @@ private func verify(value: Any, againstValue expectedValue: Any) throws {
     }
     
     if actualVerifiableValue.hashValue != expectedVerifiableValue.hashValue {
-        if let objectiveCObject = value as? NSObject {
-            let expectedValueType = type(of: expectedVerifiableValue)
-            
-            guard let convertedObject = expectedValueType.convert(objectiveCObject: objectiveCObject) else {
-                throw VerificationError.cannotVerifyValue(value)
+        if convertToObjectiveCObjectIfNeeded {
+            if let objectiveCObject = value as? NSObject {
+                let expectedValueType = type(of: expectedVerifiableValue)
+                
+                guard let convertedObject = expectedValueType.convert(objectiveCObject: objectiveCObject) else {
+                    throw VerificationError.cannotVerifyValue(value)
+                }
+                
+                return try verify(value: convertedObject, againstValue: expectedVerifiableValue, convertToObjectiveCObjectIfNeeded: false)
             }
-            
-            return try verify(value: convertedObject, againstValue: expectedVerifiableValue)
         }
         
         throw VerificationError.valueMismatchBetween(value, expectedValue)
