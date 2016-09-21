@@ -151,6 +151,26 @@ class WrapTests: XCTestCase {
         }
     }
     
+    func testDatePropertyWithCustomizableStruct() {
+        let date = Date()
+        
+        struct Model: WrapCustomizable {
+            let date: Date
+        }
+        
+        let dateFormatter = DateFormatter()
+        
+        do {
+            let model = Model(date: date)
+            
+            try verify(dictionary: wrap(model, dateFormatter: dateFormatter), againstDictionary: [
+                "date" : dateFormatter.string(from: date)
+            ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+    
     func testEmptyStruct() {
         struct Empty {}
         
@@ -578,7 +598,7 @@ class WrapTests: XCTestCase {
         struct Model: WrapCustomizable {
             let string = "A string"
             
-            func wrap() -> Any? {
+            func wrap(dateFormatter: DateFormatter?) -> Any? {
                 return [
                     "custom" : "A value"
                 ]
@@ -598,7 +618,7 @@ class WrapTests: XCTestCase {
         struct Model: WrapCustomizable {
             let int = 27
             
-            func wrap() -> Any? {
+            func wrap(dateFormatter: DateFormatter?) -> Any? {
                 do {
                     var wrapped = try Wrapper().wrap(object: self)
                     wrapped["custom"] = "A value"
@@ -624,7 +644,7 @@ class WrapTests: XCTestCase {
             let string = "Hello"
             let int = 16
             
-            func wrap(propertyNamed propertyName: String, originalValue: Any) throws -> Any? {
+            func wrap(propertyNamed propertyName: String, originalValue: Any, dateFormatter: DateFormatter?) throws -> Any? {
                 if propertyName == "int" {
                     XCTAssertEqual((originalValue as? Int) ?? 0, self.int)
                     return 27
@@ -646,7 +666,7 @@ class WrapTests: XCTestCase {
     
     func testCustomWrappingFailureThrows() {
         struct Model: WrapCustomizable {
-            func wrap() -> Any? {
+            func wrap(dateFormatter: DateFormatter?) -> Any? {
                 return nil
             }
         }
@@ -665,7 +685,7 @@ class WrapTests: XCTestCase {
         struct Model: WrapCustomizable {
             let string = "A string"
             
-            func wrap(propertyNamed propertyName: String, originalValue: Any) throws -> Any? {
+            func wrap(propertyNamed propertyName: String, originalValue: Any, dateFormatter: DateFormatter?) throws -> Any? {
                 throw NSError(domain: "ERROR", code: 0, userInfo: nil)
             }
         }
