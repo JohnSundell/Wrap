@@ -6,7 +6,7 @@
 
 Wrap is an easy to use Swift JSON encoder. Don't spend hours writing JSON encoding code - just wrap it instead!
 
-Using Wrap is as easy as calling `Wrap()` on any instance of a `class` or `struct` that you wish to encode. It automatically encodes all of your type’s properties, including nested objects, collections, enums and more!
+Using Wrap is as easy as calling `wrap()` on any instance of a `class` or `struct` that you wish to encode. It automatically encodes all of your type’s properties, including nested objects, collections, enums and more!
 
 It also provides a suite of simple but powerful customization APIs that enables you to use it on any model setup with ease.
 
@@ -23,10 +23,10 @@ struct User {
 let user = User(name: "John", age: 28)
 ```
 
-Using `Wrap()` you can now encode a `User` instance with one command:
+Using `wrap()` you can now encode a `User` instance with one command:
 
 ```swift
-let dictionary: [String : AnyObject] = try Wrap(user)
+let dictionary: [String : Any] = try wrap(user)
 ```
 
 Which will produce the following `Dictionary`:
@@ -86,10 +86,10 @@ let ship = SpaceShip(
 )
 ```
 
-And now let’s encode it with one call to `Wrap()`:
+And now let’s encode it with one call to `wrap()`:
 
 ```swift
-let dictionary: WrappedDictionary = try Wrap(ship)
+let dictionary: WrappedDictionary = try wrap(ship)
 ```
 
 Which will produce the following dictionary:
@@ -118,14 +118,14 @@ While automation is awesome, customization is just as important. Thankfully, Wra
 
 #### Customizing keys
 
-Per default Wrap uses the property names of a type as its encoding keys, but sometimes this is not what you’re looking for. You can choose to override any or all of a type’s encoding keys by making it conform to `WrapCustomizable` and implementing `keyForWrappingPropertyNamed`, like this:
+Per default Wrap uses the property names of a type as its encoding keys, but sometimes this is not what you’re looking for. You can choose to override any or all of a type’s encoding keys by making it conform to `WrapCustomizable` and implementing `keyForWrapping(propertyNamed:)`, like this:
 
 ```swift
 struct Book: WrapCustomizable {
     let title: String
     let authorName: String
 
-    func keyForWrappingPropertyNamed(propertyName: String) -> String? {
+    func keyForWrapping(propertyNamed propertyName: String) -> String? {
         if propertyName == "authorName" {
             return "author_name"
         }
@@ -135,22 +135,26 @@ struct Book: WrapCustomizable {
 }
 ```
 
-You can also use the `keyForWrappingPropertyNamed()` API to skip a property entirely, by returning nil from this method for it.
+You can also use the `keyForWrapping(propertyNamed:)` API to skip a property entirely, by returning nil from this method for it.
 
 #### Custom key types
 
 You might have nested dictionaries that are not keyed on `Strings`, and for those Wrap provides the `WrappableKey` protocol. This enables you to easily convert any type into a string that can be used as a JSON key.
 
+#### Encoding keys as snake_case
+
+If you want the dictionary that Wrap produces to have snake_cased keys rather than the default (which is matching the names of the properties that were encoded), you can easily do so by conforming to `WrapCustomizable` and returning `.convertToSnakeCase` from the `wrapKeyStyle` property. Doing that will, for example, convert the property name `myProperty` into the key `my_property`.
+
 #### Customized wrapping
 
-For some nested types, you might want to handle the wrapping yourself. This may be especially true for any custom collections, or types that have a completely different representation when encoded. To do that, make a type conform to `WrapCustomizable` and implement `wrap()`, like this:
+For some nested types, you might want to handle the wrapping yourself. This may be especially true for any custom collections, or types that have a completely different representation when encoded. To do that, make a type conform to `WrapCustomizable` and implement `wrap(context:dateFormatter:)`, like this:
 
 ```swift
 struct Library: WrapCustomizable {
     private let booksByID: [String : Book]
 
-    func wrap() -> AnyObject? {
-        return Wrapper().wrap(self.booksByID)
+    func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
+        return Wrapper(context: context, dateFormatter: dateFormatter).wrap(self.booksByID)
     }
 }
 ```
@@ -163,13 +167,13 @@ Non-raw type `enum` values are also automatically encoded. The default behavior 
 
 ```swift
 enum Profession {
-    case Developer(favoriteLanguageName: String)
-    case Lawyer
+    case developer(favoriteLanguageName: String)
+    case lawyer
 }
 
 struct Person {
-    let profession = Profession.Developer(favoriteLanguageName: "Swift")
-    let hobbyProfession = Profession.Lawyer
+    let profession = Profession.developer(favoriteLanguageName: "Swift")
+    let hobbyProfession = Profession.lawyer
 }
 ```
 
@@ -178,11 +182,44 @@ Encodes into:
 ```json
 {
     "profession": {
-        "Developer": "Swift"
+        "developer": "Swift"
     },
-    "hobbyProfession": "Lawyer"
+    "hobbyProfession": "lawyer"
 }
 ```
+
+### Contextual objects
+
+To be able to easily encode any dependencies that you might want to use during the encoding process, Wrap provides the ability to supply a contextual object when initiating the wrapping process (by calling `wrap(object, context: myContext`).
+
+A context can be of `Any` type and is accessible in all `WrapCustomizable` wrapping methods. Here is an example, where we send in a prefix to add to a `Book`’s `title`:
+
+```swift
+struct Book: WrapCustomizable {
+    let title: String
+    
+    func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
+        guard let prefix = context as? String else {
+            return nil
+        }
+        
+        return [
+            "title" : prefix + self.title
+        ]
+    }
+}
+```
+
+### Compatibility
+
+Wrap supports all current Apple platforms with the following minimum versions:
+
+- iOS 8
+- (mac)OS (X) 10.11
+- watchOS 2
+- tvOS 9
+
+The current version of Wrap (and the `master` branch) is only compatible with Swift 3 and Xcode 8, however, there’s a [`swift2` branch](https://github.com/JohnSundell/Wrap/tree/swift2) that can be used in apps using Swift 2.3.
 
 ### Installation
 
@@ -200,7 +237,7 @@ Clone the repo and drag the file `Wrap.swift` into your Xcode project.
 
 **Swift Package Manager:**
 
-Add the line `.Package(url: "https://github.com/JohnSundell/Wrap.git", majorVersion: 1)` to your `Package.swift` file.
+Add the line `.Package(url: "https://github.com/JohnSundell/Wrap.git", majorVersion: 2)` to your `Package.swift` file.
 
 ### Hope you enjoy wrapping your objects!
 

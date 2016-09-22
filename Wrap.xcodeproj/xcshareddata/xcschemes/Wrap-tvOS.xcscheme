@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0710"
+   LastUpgradeVersion = "0800"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -32,9 +32,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "52D6D9F81BEFFFBE002C0205"
-               BuildableName = "Unbox-tvOSTests.xctest"
-               BlueprintName = "Unbox-tvOSTests"
+               BlueprintIdentifier = "52D6D9851BEFF229002C0205"
+               BuildableName = "Wrap.xctest"
+               BlueprintName = "WrapTests"
                ReferencedContainer = "container:Wrap.xcodeproj">
             </BuildableReference>
          </TestableReference>
