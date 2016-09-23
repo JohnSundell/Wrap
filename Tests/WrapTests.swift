@@ -822,6 +822,25 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
+    
+    func testInheritance() {
+        class Superclass {
+            let string = "String"
+        }
+        
+        class Subclass: Superclass {
+            let int = 22
+        }
+        
+        do {
+            try verify(dictionary: wrap(Subclass()), againstDictionary: [
+                "string" : "String",
+                "int" : 22
+            ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
 }
 
 // MARK: - Mocks
