@@ -101,7 +101,7 @@ public func wrap<T>(_ objects: [T], context: Any? = nil, dateFormatter: DateForm
  */
 public func wrap<T>(_ objects: [T], writingOptions: JSONSerialization.WritingOptions? = nil, context: Any? = nil, dateFormatter: DateFormatter? = nil) throws -> Data {
     let dictionaries: [WrappedDictionary] = try wrap(objects, context: context)
-    return try JSONSerialization.data(withJSONObject: dictionaries as AnyObject, options: writingOptions ?? [])
+    return try JSONSerialization.data(withJSONObject: dictionaries, options: writingOptions ?? [])
 }
 
 // Enum describing various styles of keys in a wrapped dictionary
@@ -271,7 +271,7 @@ public extension WrapCustomizable {
 /// Extension providing a default wrapping implementation for `RawRepresentable` Enums
 public extension WrappableEnum where Self: RawRepresentable {
     public func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
-        return self.rawValue as AnyObject
+        return self.rawValue
     }
 }
 
@@ -334,7 +334,7 @@ extension NSArray: WrapCustomizable {
 /// Extension customizing how NSDictionaries are wrapped
 extension NSDictionary: WrapCustomizable {
     public func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
-        return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(dictionary: self as [NSObject : AnyObject]) as AnyObject
+        return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(dictionary: self as [NSObject : AnyObject])
     }
 }
 
@@ -388,7 +388,7 @@ private extension Wrapper {
     
     func wrap<T>(object: T, writingOptions: JSONSerialization.WritingOptions) throws -> Data {
         let dictionary = try self.wrap(object: object, enableCustomizedWrapping: true)
-        return try JSONSerialization.data(withJSONObject: dictionary as AnyObject, options: writingOptions)
+        return try JSONSerialization.data(withJSONObject: dictionary, options: writingOptions)
     }
     
     func wrap<T>(value: T, propertyName: String? = nil) throws -> Any {
@@ -397,7 +397,7 @@ private extension Wrapper {
         }
         
         if let date = value as? WrappableDate {
-            return self.wrap(date: date) as AnyObject
+            return self.wrap(date: date)
         }
         
         let mirror = Mirror(reflecting: value)
