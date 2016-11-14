@@ -48,7 +48,7 @@ struct SpaceShip {
     let weight: Double
     let engine: Engine
     let passengers: [Astronaut]
-    let launchLiveStreamURL: NSURL?
+    let launchLiveStreamURL: URL?
     let lastPilot: Astronaut?
 }
 
@@ -81,7 +81,7 @@ let ship = SpaceShip(
         Astronaut(name: "Mike"),
         Astronaut(name: "Amanda")
     ],
-    launchLiveStreamURL: NSURL(string: "http://livestream.com"),
+    launchLiveStreamURL: URL(string: "http://livestream.com"),
     lastPilot: nil
 )
 ```
@@ -110,7 +110,7 @@ Which will produce the following dictionary:
 }
 ```
 
-As you can see, Wrap automatically encoded the `NSURL` property to its `absoluteString`, and ignored any properties that were `nil` (reducing the size of the produced JSON).
+As you can see, Wrap automatically encoded the `URL` property to its `absoluteString`, and ignored any properties that were `nil` (reducing the size of the produced JSON).
 
 ### Customization
 
