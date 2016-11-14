@@ -274,7 +274,7 @@ class WrapTests: XCTestCase {
         }
     }
     
-    func testURLProperty() {
+    func testNSURLProperty() {
         struct Model {
             let optionalURL = NSURL(string: "http://github.com")
             let URL = NSURL(string: "http://google.com")!
@@ -284,6 +284,22 @@ class WrapTests: XCTestCase {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "optionalURL" : "http://github.com",
                 "URL" : "http://google.com"
+            ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+    
+    func testURLProperty() {
+        struct Model {
+            let optionalUrl = URL(string: "http://github.com")
+            let url = URL(string: "http://google.com")!
+        }
+        
+        do {
+            try verify(dictionary: wrap(Model()), againstDictionary: [
+                "optionalUrl" : "http://github.com",
+                "url" : "http://google.com"
             ])
         } catch {
             XCTFail(error.toString())
