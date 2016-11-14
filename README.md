@@ -197,12 +197,12 @@ A context can be of `Any` type and is accessible in all `WrapCustomizable` wrapp
 ```swift
 struct Book: WrapCustomizable {
     let title: String
-    
+
     func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
         guard let prefix = context as? String else {
             return nil
         }
-        
+
         return [
             "title" : prefix + self.title
         ]
@@ -215,7 +215,7 @@ struct Book: WrapCustomizable {
 Wrap supports all current Apple platforms with the following minimum versions:
 
 - iOS 8
-- (mac)OS (X) 10.11
+- (mac)OS (X) 10.9
 - watchOS 2
 - tvOS 9
 
