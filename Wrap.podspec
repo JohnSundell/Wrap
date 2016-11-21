@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Wrap"
-  s.version      = "2.0.1"
+  s.version      = "2.0.2"
   s.summary      = "The easy to use Swift JSON encoder"
   s.description  = <<-DESC
   Wrap is an easy to use Swift JSON encoder. Don't spend hours writing JSON encoding code - just wrap it instead!
@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = "10.9"
   s.watchos.deployment_target = "2.0"
   s.tvos.deployment_target = "9.0"
-  s.source       = { :git => "https://github.com/JohnSundell/Wrap.git", :tag => "2.0.1" }
+  s.source       = { :git => "https://github.com/JohnSundell/Wrap.git", :tag => "2.0.2" }
   s.source_files  = "Sources/Wrap.swift"
   s.framework  = "Foundation"
 end
