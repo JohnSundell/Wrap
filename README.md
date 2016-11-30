@@ -23,12 +23,6 @@
     </a>
 </p>
 
-# Wrap
-
-![Travis](https://img.shields.io/travis/JohnSundell/Wrap/master.svg)
-![CocoaPods](https://img.shields.io/cocoapods/v/Wrap.svg)
-[![Carthage](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-
 Wrap is an easy to use Swift JSON encoder. Don't spend hours writing JSON encoding code - just wrap it instead!
 
 Using Wrap is as easy as calling `wrap()` on any instance of a `class` or `struct` that you wish to encode. It automatically encodes all of your type’s properties, including nested objects, collections, enums and more!
