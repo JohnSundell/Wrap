@@ -794,11 +794,39 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-    
+
+	func testDefaultSnakeCase() {
+		Wrapper.defaultKeyStyle = .convertToSnakeCase
+
+		struct Model {
+			let simple = "simple name"
+			let camelCased = "camel cased name"
+			let CAPITALIZED = "capitalized name"
+			let _underscored = "underscored name"
+			let center_underscored = "center underscored name"
+			let double__underscored = "double underscored name"
+		}
+
+		do {
+			try verify(dictionary: wrap(Model()), againstDictionary: [
+				"simple" : "simple name",
+				"camel_cased" : "camel cased name",
+				"capitalized" : "capitalized name",
+				"_underscored" : "underscored name",
+				"center_underscored" : "center underscored name",
+				"double__underscored" : "double underscored name"
+				])
+		} catch {
+			XCTFail(error.toString())
+		}
+
+		Wrapper.defaultKeyStyle = .matchPropertyName
+	}
+
     func testContext() {
         struct NestedModel: WrapCustomizable {
             let string = "String"
-            
+
             func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
                 XCTAssertEqual(context as! String, "Context")
                 return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(object: self)
