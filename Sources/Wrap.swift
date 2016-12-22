@@ -201,7 +201,15 @@ public protocol WrappableDate {
 public class Wrapper {
     fileprivate let context: Any?
     fileprivate var dateFormatter: DateFormatter?
-    
+
+	/**
+	 *	The default key wrapping style to be used on property names. Default value is `WrapKeyStyle.matchPropertyName`
+	 *
+	 *	This setting will be overridden if the `wrapKeyStyle` property of `WrapCustomizable`
+	 *	is implemented.
+	 */
+	public static var defaultKeyStyle: WrapKeyStyle = .matchPropertyName
+
     /**
      *  Initialize an instance of this class
      *
@@ -236,7 +244,7 @@ public enum WrapError: Error {
 /// Extension containing default implementations of `WrapCustomizable`. Override as you see fit.
 public extension WrapCustomizable {
     var wrapKeyStyle: WrapKeyStyle {
-        return .matchPropertyName
+        return Wrapper.defaultKeyStyle
     }
     
     func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
@@ -248,7 +256,7 @@ public extension WrapCustomizable {
         case .matchPropertyName:
             return propertyName
         case .convertToSnakeCase:
-            return self.convertPropertyNameToSnakeCase(propertyName: propertyName)
+			return propertyName.toSnakeCase()
         }
     }
     
@@ -257,15 +265,15 @@ public extension WrapCustomizable {
     }
 }
 
-/// Extension adding convenience APIs to `WrapCustomizable` types
-public extension WrapCustomizable {
-    /// Convert a given property name (assumed to be camelCased) to snake_case
-    func convertPropertyNameToSnakeCase(propertyName: String) -> String {
-        let regex = try! NSRegularExpression(pattern: "(?<=[a-z])([A-Z])|([A-Z])(?=[a-z])", options: [])
-        let range = NSRange(location: 0, length: propertyName.characters.count)
-        let camelCasePropertyName = regex.stringByReplacingMatches(in: propertyName, options: [], range: range, withTemplate: "_$1$2")
-        return camelCasePropertyName.lowercased()
-    }
+/// Extension adding convenience snake case conversion for Strings
+extension String {
+	/// Convert a given property name (assumed to be camelCased) to snake_case
+	func toSnakeCase() -> String {
+		let regex = try! NSRegularExpression(pattern: "(?<=[a-z])([A-Z])|([A-Z])(?=[a-z])", options: [])
+		let range = NSRange(location: 0, length: characters.count)
+		let camelCasePropertyName = regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: "_$1$2")
+		return camelCasePropertyName.lowercased()
+	}
 }
 
 /// Extension providing a default wrapping implementation for `RawRepresentable` Enums
@@ -382,7 +390,7 @@ private extension Wrapper {
                 return wrappedDictionary
             }
         }
-        
+
         var mirrors = [Mirror]()
         var currentMirror: Mirror? = Mirror(reflecting: object)
         
@@ -505,9 +513,14 @@ private extension Wrapper {
                 if let customizable = customizable {
                     wrappingKey = customizable.keyForWrapping(propertyNamed: propertyName)
                 } else {
-                    wrappingKey = propertyName
+					switch Wrapper.defaultKeyStyle {
+					case .matchPropertyName:
+						wrappingKey = propertyName
+					case .convertToSnakeCase:
+						wrappingKey = propertyName.toSnakeCase()
+					}
                 }
-                
+
                 if let wrappingKey = wrappingKey {
                     if let wrappedProperty = try customizable?.wrap(propertyNamed: propertyName, originalValue: property.value, context: self.context, dateFormatter: self.dateFormatter) {
                         wrappedDictionary[wrappingKey] = wrappedProperty
