@@ -27,6 +27,10 @@
 
 import Foundation
 
+#if !os(Linux)
+typealias RegularExpression = NSRegularExpression
+#endif
+
 /// Type alias defining what type of Dictionary that Wrap produces
 public typealias WrappedDictionary = [String : Any]
 
@@ -261,11 +265,7 @@ public extension WrapCustomizable {
 public extension WrapCustomizable {
     /// Convert a given property name (assumed to be camelCased) to snake_case
     func convertPropertyNameToSnakeCase(propertyName: String) -> String {
-        #if os(OSX) || os(iOS) || os(watchOS) || os(tvOS)
-            let regex = try! NSRegularExpression(pattern: "(?<=[a-z])([A-Z])|([A-Z])(?=[a-z])", options: [])
-        #elseif os(Linux)
-            let regex = try! RegularExpression(pattern: "(?<=[a-z])([A-Z])|([A-Z])(?=[a-z])", options: [])
-        #endif
+        let regex = try! RegularExpression(pattern: "(?<=[a-z])([A-Z])|([A-Z])(?=[a-z])", options: [])
         let range = NSRange(location: 0, length: propertyName.characters.count)
         let camelCasePropertyName = regex.stringByReplacingMatches(in: propertyName, options: [], range: range, withTemplate: "_$1$2")
         return camelCasePropertyName.lowercased()
@@ -344,12 +344,12 @@ extension NSArray: WrapCustomizable {
 }
 
 /// Extension customizing how NSDictionaries are wrapped
-#if os(OSX) || os(iOS) || os(watchOS) || os(tvOS)
-    extension NSDictionary: WrapCustomizable {
-        public func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
-            return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(dictionary: self as [NSObject : AnyObject])
-        }
+#if !os(Linux)
+extension NSDictionary: WrapCustomizable {
+    public func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
+        return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(dictionary: self as [NSObject : AnyObject])
     }
+}
 #endif
 
 /// Extension making Int a WrappableKey
@@ -367,12 +367,12 @@ extension Date: WrappableDate {
 }
 
 /// Extension making NSdate a WrappableDate
-#if os(OSX) || os(iOS) || os(watchOS) || os(tvOS)
-    extension NSDate: WrappableDate {
-        public func wrap(dateFormatter: DateFormatter) -> String {
-            return dateFormatter.string(from: self as Date)
-        }
+#if !os(Linux)
+extension NSDate: WrappableDate {
+    public func wrap(dateFormatter: DateFormatter) -> String {
+        return dateFormatter.string(from: self as Date)
     }
+}
 #endif
 
 // MARK: - Private
