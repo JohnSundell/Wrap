@@ -304,21 +304,35 @@ class WrapTests: XCTestCase {
         }
     }
 
-    func testSetProperties() {
+    func testHomogeneousSetProperty() {
         struct Model {
-            let homogeneous: Set<String> = ["Wrap", "Tests"]
-            let mixed: Set<NSObject> = ["Wrap" as NSObject, 15 as NSObject, 8.3 as NSObject]
+            let set: Set<String> = ["Wrap", "Tests"]
         }
 
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
-                "homogeneous" : ["Wrap", "Tests"],
-                "mixed" : ["Wrap", 15, 8.3]
+                "set" : ["Wrap", "Tests"]
             ])
         } catch {
             XCTFail(error.toString())
         }
     }
+
+    #if !os(Linux)
+    func testMixedNSObjectSetProperty() {
+        struct Model {
+            let set: Set<NSObject> = ["Wrap" as NSObject, 15 as NSObject, 8.3 as NSObject]
+        }
+
+        do {
+            try verify(dictionary: wrap(Model()), againstDictionary: [
+                "set" : ["Wrap", 15, 8.3]
+            ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+    #endif
 
     func testNSURLProperty() {
         struct Model {
