@@ -881,6 +881,29 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
+
+    func testIgnoringClosureProperties() {
+        struct StringConvertible: CustomStringConvertible {
+            var description: String { return "(Function)" }
+        }
+
+        struct Model {
+            let closure = {}
+            let string = "(Function)"
+            let nsString = NSString(string: "(Function)")
+            let stringConvertible = StringConvertible()
+        }
+
+        do {
+            try verify(dictionary: wrap(Model()), againstDictionary: [
+                "string" : "(Function)",
+                "nsString" : "(Function)",
+                "stringConvertible" : [:]
+            ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
 }
 
 // MARK: - Mocks

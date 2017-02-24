@@ -407,7 +407,7 @@ private extension Wrapper {
         return try JSONSerialization.data(withJSONObject: dictionary, options: writingOptions)
     }
     
-    func wrap<T>(value: T, propertyName: String? = nil) throws -> Any {
+    func wrap<T>(value: T, propertyName: String? = nil) throws -> Any? {
         if let customizable = value as? WrapCustomizable {
             return try self.performCustomWrapping(object: customizable)
         }
@@ -419,18 +419,29 @@ private extension Wrapper {
         let mirror = Mirror(reflecting: value)
         
         if mirror.children.isEmpty {
-            if mirror.displayStyle == .enum {
-                if let wrappableEnum = value as? WrappableEnum {
-                    if let wrapped = wrappableEnum.wrap(context: self.context, dateFormatter: self.dateFormatter) {
-                        return wrapped
+            if let displayStyle = mirror.displayStyle {
+                switch displayStyle {
+                case .enum:
+                    if let wrappableEnum = value as? WrappableEnum {
+                        if let wrapped = wrappableEnum.wrap(context: self.context, dateFormatter: self.dateFormatter) {
+                            return wrapped
+                        }
+
+                        throw WrapError.wrappingFailedForObject(value)
                     }
-                    
-                    throw WrapError.wrappingFailedForObject(value)
+
+                    return "\(value)"
+                case .struct:
+                    return [:]
+                default:
+                    return value
                 }
-                
-                return "\(value)"
-            } else if mirror.displayStyle == .struct {
-                return [:]
+            }
+
+            if !(value is CustomStringConvertible) {
+                if String(describing: value) == "(Function)" {
+                    return nil
+                }
             }
             
             return value
@@ -448,8 +459,9 @@ private extension Wrapper {
         let wrapper = Wrapper(context: self.context, dateFormatter: self.dateFormatter)
         
         for element in collection {
-            let wrapped = try wrapper.wrap(value: element)
-            wrappedArray.append(wrapped)
+            if let wrapped = try wrapper.wrap(value: element) {
+                wrappedArray.append(wrapped)
+            }
         }
         
         return wrappedArray
