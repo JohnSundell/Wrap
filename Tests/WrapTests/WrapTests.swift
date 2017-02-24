@@ -594,6 +594,7 @@ class WrapTests: XCTestCase {
         }
     }
 
+    #if !os(Linux)
     func testObjectiveCObjectProperties() {
         struct Model {
             let string = NSString(string: "Hello")
@@ -611,6 +612,7 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
+    #endif
 
     func testWrappableKey() {
         enum Key: Int, WrappableKey {

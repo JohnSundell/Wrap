@@ -51,6 +51,7 @@
 		52D6D9E21BEFFF6E002C0205 /* Wrap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Wrap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52D6D9F01BEFFFBE002C0205 /* Wrap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Wrap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52D6DA0F1BF000BD002C0205 /* Wrap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Wrap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		52E48D2F1E60FA5C0053A668 /* WrapTests+Linux.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "WrapTests+Linux.swift"; path = "Tests/WrapTests/WrapTests+Linux.swift"; sourceTree = "<group>"; };
 		AD2FAA261CD0B6D800659CF4 /* Wrap.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Wrap.plist; sourceTree = "<group>"; };
 		AD2FAA281CD0B6E100659CF4 /* WrapTests.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = WrapTests.plist; sourceTree = "<group>"; };
 		DD75027A1C68FCFC006590AF /* Wrap-macOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Wrap-macOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,6 +119,7 @@
 			children = (
 				52D6D9961BEFF375002C0205 /* Wrap.swift */,
 				52D6D9971BEFF375002C0205 /* WrapTests.swift */,
+				52E48D2F1E60FA5C0053A668 /* WrapTests+Linux.swift */,
 				52D6D99C1BEFF38C002C0205 /* Configs */,
 				52D6D97D1BEFF229002C0205 /* Products */,
 			);
@@ -330,7 +332,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0810;
-				ORGANIZATIONNAME = "Wrap";
+				ORGANIZATIONNAME = Wrap;
 				TargetAttributes = {
 					52D6D97B1BEFF229002C0205 = {
 						CreatedOnToolsVersion = 7.1;
