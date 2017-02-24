@@ -1,7 +1,10 @@
 language: objective-c
 osx_image: xcode8
 script:
-    - xcodebuild -project Wrap.xcodeproj -scheme Wrap-iOS clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-    - xcodebuild -project Wrap.xcodeproj -scheme Wrap-watchOS clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-    - xcodebuild -project Wrap.xcodeproj -scheme Wrap-OSX clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-    - xcodebuild -project Wrap.xcodeproj -scheme WrapTests clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+    - xcodebuild clean build -project Wrap.xcodeproj -scheme Wrap-iOS CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+    - xcodebuild clean build -project Wrap.xcodeproj -scheme Wrap-macOS CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+    - xcodebuild clean build -project Wrap.xcodeproj -scheme Wrap-watchOS CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+    - xcodebuild clean build -project Wrap.xcodeproj -scheme Wrap-tvOS CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+    - xcodebuild clean test -project Wrap.xcodeproj -scheme Wrap-iOS -destination "platform=iOS Simulator,name=iPhone 6" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+    - xcodebuild clean test -project Wrap.xcodeproj -scheme Wrap-macOS -destination "platform=OS X" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+    - xcodebuild clean test -project Wrap.xcodeproj -scheme Wrap-tvOS -destination "platform=tvOS Simulator,name=Apple TV 1080p" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
