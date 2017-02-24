@@ -926,14 +926,12 @@ class WrapTests: XCTestCase {
         struct Model {
             let closure = {}
             let string = "(Function)"
-            let nsString = NSString(string: "(Function)")
             let stringConvertible = StringConvertible()
         }
 
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "string" : "(Function)",
-                "nsString" : "(Function)",
                 "stringConvertible" : [:]
             ])
         } catch {
