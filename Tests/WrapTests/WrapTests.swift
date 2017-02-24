@@ -310,9 +310,14 @@ class WrapTests: XCTestCase {
         }
 
         do {
-            try verify(dictionary: wrap(Model()), againstDictionary: [
-                "set" : ["Wrap", "Tests"]
-            ])
+            let dictionary: WrappedDictionary = try wrap(Model())
+            XCTAssertEqual(dictionary.count, 1)
+
+            guard let array = dictionary["set"] as? [String] else {
+                return XCTFail("Expected array for key \"set\"")
+            }
+
+            XCTAssertEqual(Set(array), ["Wrap", "Tests"])
         } catch {
             XCTFail(error.toString())
         }
