@@ -876,7 +876,7 @@ class WrapTests: XCTestCase {
             try verify(dictionary: wrap(Subclass()), againstDictionary: [
                 "string" : "String",
                 "int" : 22
-                ])
+            ])
         } catch {
             XCTFail(error.toString())
         }
@@ -893,10 +893,28 @@ private protocol MockProtocol {
 // MARK: - Utilities
 
 private enum VerificationError: Error {
-    case countMismatch
+    case arrayCountMismatch(Int, Int)
+    case dictionaryKeyMismatch([String], [String])
     case cannotVerifyValue(Any)
     case missingValueForKey(String)
     case valueMismatchBetween(Any, Any)
+}
+
+extension VerificationError: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .arrayCountMismatch(let countA, let countB):
+            return "Array count mismatch: \(countA) vs \(countB)"
+        case .dictionaryKeyMismatch(let keysA, let keysB):
+            return "Dictionary key count mismatch: \(keysA) vs \(keysB)"
+        case .cannotVerifyValue(let value):
+            return "Cannot verify value: \(value)"
+        case .missingValueForKey(let key):
+            return "Missing expected value for key: \(key)"
+        case .valueMismatchBetween(let valueA, let valueB):
+            return "Values don't match: \(valueA) vs \(valueB)"
+        }
+    }
 }
 
 private protocol Verifiable {
@@ -984,7 +1002,7 @@ extension NSDate: Verifiable {
 
 private func verify(dictionary: WrappedDictionary, againstDictionary expectedDictionary: WrappedDictionary) throws {
     if dictionary.count != expectedDictionary.count {
-        throw VerificationError.countMismatch
+        throw VerificationError.dictionaryKeyMismatch(Array(dictionary.keys), Array(expectedDictionary.keys))
     }
 
     for (key, expectedValue) in expectedDictionary {
@@ -1016,7 +1034,7 @@ private func verify(dictionary: WrappedDictionary, againstDictionary expectedDic
 
 private func verify(array: [Any], againstArray expectedArray: [Any]) throws {
     if array.count != expectedArray.count {
-        throw VerificationError.countMismatch
+        throw VerificationError.arrayCountMismatch(array.count, expectedArray.count)
     }
 
     for (index, expectedValue) in expectedArray.enumerated() {
