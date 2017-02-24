@@ -155,27 +155,47 @@ class WrapTests: XCTestCase {
 
     func testDateProperty() {
         let date = Date()
-        let nsDate = NSDate()
 
         struct Model {
             let date: Date
-            let nsDate: NSDate
         }
 
         let dateFormatter = DateFormatter()
 
         do {
-            let model = Model(date: date, nsDate: nsDate)
+            let model = Model(date: date)
 
             try verify(dictionary: wrap(model, dateFormatter: dateFormatter), againstDictionary: [
-                "date" : dateFormatter.string(from: date),
-                "nsDate" : dateFormatter.string(from: nsDate as Date)
+                "date" : dateFormatter.string(from: date)
             ])
         } catch {
-            XCTFail("\(try! wrap(Model(date: date, nsDate: nsDate), dateFormatter: dateFormatter) as WrappedDictionary)")
+            XCTFail("\(try! wrap(Model(date: date), dateFormatter: dateFormatter) as WrappedDictionary)")
             XCTFail(error.toString())
         }
     }
+
+    #if !os(Linux)
+    func testNSDateProperty() {
+        let date = NSDate()
+
+        struct Model {
+            let date: NSDate
+        }
+
+        let dateFormatter = DateFormatter()
+
+        do {
+            let model = Model(date: date)
+
+            try verify(dictionary: wrap(model, dateFormatter: dateFormatter), againstDictionary: [
+                "date" : dateFormatter.string(from: date as Date)
+            ])
+        } catch {
+            XCTFail("\(try! wrap(Model(date: date), dateFormatter: dateFormatter) as WrappedDictionary)")
+            XCTFail(error.toString())
+        }
+    }
+    #endif
 
     func testDatePropertyWithCustomizableStruct() {
         let date = Date()
