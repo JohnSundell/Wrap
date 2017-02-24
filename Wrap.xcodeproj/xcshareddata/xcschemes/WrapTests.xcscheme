@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0800"
+   LastUpgradeVersion = "0810"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -9,14 +9,14 @@
          <BuildActionEntry
             buildForTesting = "YES"
             buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "52D6DA0E1BF000BD002C0205"
-               BuildableName = "Wrap.framework"
-               BlueprintName = "Wrap-macOS"
+               BlueprintIdentifier = "52D6D9851BEFF229002C0205"
+               BuildableName = "Wrap.xctest"
+               BlueprintName = "WrapTests"
                ReferencedContainer = "container:Wrap.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -26,29 +26,19 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DD7502791C68FCFC006590AF"
-               BuildableName = "Wrap-macOS Tests.xctest"
-               BlueprintName = "Wrap-macOS Tests"
+               BlueprintIdentifier = "52D6D9851BEFF229002C0205"
+               BuildableName = "Wrap.xctest"
+               BlueprintName = "WrapTests"
                ReferencedContainer = "container:Wrap.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "52D6DA0E1BF000BD002C0205"
-            BuildableName = "Wrap.framework"
-            BlueprintName = "Wrap-macOS"
-            ReferencedContainer = "container:Wrap.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -65,9 +55,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "52D6DA0E1BF000BD002C0205"
-            BuildableName = "Wrap.framework"
-            BlueprintName = "Wrap-macOS"
+            BlueprintIdentifier = "52D6D9851BEFF229002C0205"
+            BuildableName = "Wrap.xctest"
+            BlueprintName = "WrapTests"
             ReferencedContainer = "container:Wrap.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -83,9 +73,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "52D6DA0E1BF000BD002C0205"
-            BuildableName = "Wrap.framework"
-            BlueprintName = "Wrap-macOS"
+            BlueprintIdentifier = "52D6D9851BEFF229002C0205"
+            BuildableName = "Wrap.xctest"
+            BlueprintName = "WrapTests"
             ReferencedContainer = "container:Wrap.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

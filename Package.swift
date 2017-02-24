@@ -1,5 +1,6 @@
 import PackageDescription
 
 let package = Package(
-    name: "Wrap"
+    name: "Wrap",
+    exclude: ["Tests"]
 )

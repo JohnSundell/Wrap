@@ -3,20 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 47;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		525F7E8E1C13057300E3A3A2 /* WrapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525F7E8D1C13057300E3A3A2 /* WrapTests.swift */; };
 		52D6D9871BEFF229002C0205 /* Wrap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D6D97C1BEFF229002C0205 /* Wrap.framework */; };
 		52D6D9981BEFF375002C0205 /* Wrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D6D9961BEFF375002C0205 /* Wrap.swift */; };
-		52D6D99B1BEFF375002C0205 /* WrapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D6D9971BEFF375002C0205 /* WrapTests.swift */; };
+		52D6D9991BEFF375002C0205 /* Wrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D6D9961BEFF375002C0205 /* Wrap.swift */; };
 		52D6D9EA1BEFFFA4002C0205 /* Wrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D6D9961BEFF375002C0205 /* Wrap.swift */; };
 		52D6DA091BF00081002C0205 /* Wrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D6D9961BEFF375002C0205 /* Wrap.swift */; };
 		52D6DA261BF00118002C0205 /* Wrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D6D9961BEFF375002C0205 /* Wrap.swift */; };
-		DD7502861C68FDDC006590AF /* WrapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D6D9971BEFF375002C0205 /* WrapTests.swift */; };
-		DD7502881C68FEDE006590AF /* Wrap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D6DA0F1BF000BD002C0205 /* Wrap.framework */; };
-		DD7502921C690C7A006590AF /* Wrap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D6D9F01BEFFFBE002C0205 /* Wrap.framework */; };
-		DD75029A1C690CBE006590AF /* WrapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D6D9971BEFF375002C0205 /* WrapTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,36 +22,22 @@
 			containerPortal = 52D6D9731BEFF229002C0205 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 52D6D97B1BEFF229002C0205;
-			remoteInfo = Wrap;
-		};
-		DD7502801C68FCFC006590AF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 52D6D9731BEFF229002C0205 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 52D6DA0E1BF000BD002C0205;
-			remoteInfo = "Wrap-macOS";
-		};
-		DD7502931C690C7A006590AF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 52D6D9731BEFF229002C0205 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 52D6D9EF1BEFFFBE002C0205;
-			remoteInfo = "Wrap-tvOS";
+			remoteInfo = Unbox;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		525F7E8D1C13057300E3A3A2 /* WrapTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WrapTests.swift; path = Tests/WrapTests.swift; sourceTree = "<group>"; };
 		52D6D97C1BEFF229002C0205 /* Wrap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Wrap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		52D6D9861BEFF229002C0205 /* Wrap-iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Wrap-iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		52D6D9861BEFF229002C0205 /* Wrap.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Wrap.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		52D6D9961BEFF375002C0205 /* Wrap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Wrap.swift; path = Sources/Wrap.swift; sourceTree = "<group>"; };
-		52D6D9971BEFF375002C0205 /* WrapTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WrapTests.swift; path = Tests/WrapTests/WrapTests.swift; sourceTree = "<group>"; };
+		52D6D99D1BEFF38C002C0205 /* iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = iOS.plist; sourceTree = "<group>"; };
+		52D6D99E1BEFF38C002C0205 /* Tests.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Tests.plist; sourceTree = "<group>"; };
 		52D6D9E21BEFFF6E002C0205 /* Wrap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Wrap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52D6D9F01BEFFFBE002C0205 /* Wrap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Wrap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		52D6DA071BF00008002C0205 /* tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = tvOS.plist; sourceTree = "<group>"; };
+		52D6DA081BF00008002C0205 /* watchOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = watchOS.plist; sourceTree = "<group>"; };
 		52D6DA0F1BF000BD002C0205 /* Wrap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Wrap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AD2FAA261CD0B6D800659CF4 /* Wrap.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Wrap.plist; sourceTree = "<group>"; };
-		AD2FAA281CD0B6E100659CF4 /* WrapTests.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = WrapTests.plist; sourceTree = "<group>"; };
-		DD75027A1C68FCFC006590AF /* Wrap-macOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Wrap-macOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DD75028D1C690C7A006590AF /* Wrap-tvOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Wrap-tvOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,22 +77,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DD7502771C68FCFC006590AF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DD7502881C68FEDE006590AF /* Wrap.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DD75028A1C690C7A006590AF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DD7502921C690C7A006590AF /* Wrap.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -117,7 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				52D6D9961BEFF375002C0205 /* Wrap.swift */,
-				52D6D9971BEFF375002C0205 /* WrapTests.swift */,
+				525F7E8D1C13057300E3A3A2 /* WrapTests.swift */,
 				52D6D99C1BEFF38C002C0205 /* Configs */,
 				52D6D97D1BEFF229002C0205 /* Products */,
 			);
@@ -127,12 +94,10 @@
 			isa = PBXGroup;
 			children = (
 				52D6D97C1BEFF229002C0205 /* Wrap.framework */,
-				52D6D9861BEFF229002C0205 /* Wrap-iOS Tests.xctest */,
+				52D6D9861BEFF229002C0205 /* Wrap.xctest */,
 				52D6D9E21BEFFF6E002C0205 /* Wrap.framework */,
 				52D6D9F01BEFFFBE002C0205 /* Wrap.framework */,
 				52D6DA0F1BF000BD002C0205 /* Wrap.framework */,
-				DD75027A1C68FCFC006590AF /* Wrap-macOS Tests.xctest */,
-				DD75028D1C690C7A006590AF /* Wrap-tvOS Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,26 +105,12 @@
 		52D6D99C1BEFF38C002C0205 /* Configs */ = {
 			isa = PBXGroup;
 			children = (
-				DD7502721C68FC1B006590AF /* Frameworks */,
-				DD7502731C68FC20006590AF /* Tests */,
+				52D6D99D1BEFF38C002C0205 /* iOS.plist */,
+				52D6D99E1BEFF38C002C0205 /* Tests.plist */,
+				52D6DA071BF00008002C0205 /* tvOS.plist */,
+				52D6DA081BF00008002C0205 /* watchOS.plist */,
 			);
 			path = Configs;
-			sourceTree = "<group>";
-		};
-		DD7502721C68FC1B006590AF /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				AD2FAA261CD0B6D800659CF4 /* Wrap.plist */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		DD7502731C68FC20006590AF /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				AD2FAA281CD0B6E100659CF4 /* WrapTests.plist */,
-			);
-			name = Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,13 +161,13 @@
 			dependencies = (
 			);
 			name = "Wrap-iOS";
-			productName = Wrap;
+			productName = Unbox;
 			productReference = 52D6D97C1BEFF229002C0205 /* Wrap.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		52D6D9851BEFF229002C0205 /* Wrap-iOS Tests */ = {
+		52D6D9851BEFF229002C0205 /* WrapTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 52D6D9931BEFF229002C0205 /* Build configuration list for PBXNativeTarget "Wrap-iOS Tests" */;
+			buildConfigurationList = 52D6D9931BEFF229002C0205 /* Build configuration list for PBXNativeTarget "WrapTests" */;
 			buildPhases = (
 				52D6D9821BEFF229002C0205 /* Sources */,
 				52D6D9831BEFF229002C0205 /* Frameworks */,
@@ -227,9 +178,9 @@
 			dependencies = (
 				52D6D9891BEFF229002C0205 /* PBXTargetDependency */,
 			);
-			name = "Wrap-iOS Tests";
-			productName = WrapTests;
-			productReference = 52D6D9861BEFF229002C0205 /* Wrap-iOS Tests.xctest */;
+			name = WrapTests;
+			productName = UnboxTests;
+			productReference = 52D6D9861BEFF229002C0205 /* Wrap.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		52D6D9E11BEFFF6E002C0205 /* Wrap-watchOS */ = {
@@ -246,7 +197,7 @@
 			dependencies = (
 			);
 			name = "Wrap-watchOS";
-			productName = "Wrap-watchOS";
+			productName = "Unbox-watchOS";
 			productReference = 52D6D9E21BEFFF6E002C0205 /* Wrap.framework */;
 			productType = "com.apple.product-type.framework";
 		};
@@ -264,13 +215,13 @@
 			dependencies = (
 			);
 			name = "Wrap-tvOS";
-			productName = "Wrap-tvOS";
+			productName = "Unbox-tvOS";
 			productReference = 52D6D9F01BEFFFBE002C0205 /* Wrap.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		52D6DA0E1BF000BD002C0205 /* Wrap-macOS */ = {
+		52D6DA0E1BF000BD002C0205 /* Wrap-OSX */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 52D6DA201BF000BD002C0205 /* Build configuration list for PBXNativeTarget "Wrap-macOS" */;
+			buildConfigurationList = 52D6DA201BF000BD002C0205 /* Build configuration list for PBXNativeTarget "Wrap-OSX" */;
 			buildPhases = (
 				52D6DA0A1BF000BD002C0205 /* Sources */,
 				52D6DA0B1BF000BD002C0205 /* Frameworks */,
@@ -281,46 +232,10 @@
 			);
 			dependencies = (
 			);
-			name = "Wrap-macOS";
-			productName = "Wrap-macOS";
+			name = "Wrap-OSX";
+			productName = "Unbox-OSX";
 			productReference = 52D6DA0F1BF000BD002C0205 /* Wrap.framework */;
 			productType = "com.apple.product-type.framework";
-		};
-		DD7502791C68FCFC006590AF /* Wrap-macOS Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DD7502821C68FCFC006590AF /* Build configuration list for PBXNativeTarget "Wrap-macOS Tests" */;
-			buildPhases = (
-				DD7502761C68FCFC006590AF /* Sources */,
-				DD7502771C68FCFC006590AF /* Frameworks */,
-				DD7502781C68FCFC006590AF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DD7502811C68FCFC006590AF /* PBXTargetDependency */,
-			);
-			name = "Wrap-macOS Tests";
-			productName = "Wrap-OS Tests";
-			productReference = DD75027A1C68FCFC006590AF /* Wrap-macOS Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		DD75028C1C690C7A006590AF /* Wrap-tvOS Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DD7502951C690C7A006590AF /* Build configuration list for PBXNativeTarget "Wrap-tvOS Tests" */;
-			buildPhases = (
-				DD7502891C690C7A006590AF /* Sources */,
-				DD75028A1C690C7A006590AF /* Frameworks */,
-				DD75028B1C690C7A006590AF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DD7502941C690C7A006590AF /* PBXTargetDependency */,
-			);
-			name = "Wrap-tvOS Tests";
-			productName = "Wrap-tvOS Tests";
-			productReference = DD75028D1C690C7A006590AF /* Wrap-tvOS Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -328,9 +243,9 @@
 		52D6D9731BEFF229002C0205 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0720;
+				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0810;
-				ORGANIZATIONNAME = "Wrap";
+				ORGANIZATIONNAME = "John Sundell";
 				TargetAttributes = {
 					52D6D97B1BEFF229002C0205 = {
 						CreatedOnToolsVersion = 7.1;
@@ -352,18 +267,10 @@
 						CreatedOnToolsVersion = 7.1;
 						LastSwiftMigration = 0800;
 					};
-					DD7502791C68FCFC006590AF = {
-						CreatedOnToolsVersion = 7.2.1;
-						LastSwiftMigration = 0800;
-					};
-					DD75028C1C690C7A006590AF = {
-						CreatedOnToolsVersion = 7.2.1;
-						LastSwiftMigration = 0800;
-					};
 				};
 			};
 			buildConfigurationList = 52D6D9761BEFF229002C0205 /* Build configuration list for PBXProject "Wrap" */;
-			compatibilityVersion = "Xcode 6.3";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -375,12 +282,10 @@
 			projectRoot = "";
 			targets = (
 				52D6D97B1BEFF229002C0205 /* Wrap-iOS */,
-				52D6DA0E1BF000BD002C0205 /* Wrap-macOS */,
+				52D6DA0E1BF000BD002C0205 /* Wrap-OSX */,
 				52D6D9E11BEFFF6E002C0205 /* Wrap-watchOS */,
 				52D6D9EF1BEFFFBE002C0205 /* Wrap-tvOS */,
-				52D6D9851BEFF229002C0205 /* Wrap-iOS Tests */,
-				DD7502791C68FCFC006590AF /* Wrap-macOS Tests */,
-				DD75028C1C690C7A006590AF /* Wrap-tvOS Tests */,
+				52D6D9851BEFF229002C0205 /* WrapTests */,
 			);
 		};
 /* End PBXProject section */
@@ -421,20 +326,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DD7502781C68FCFC006590AF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DD75028B1C690C7A006590AF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -450,7 +341,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				52D6D99B1BEFF375002C0205 /* WrapTests.swift in Sources */,
+				52D6D9991BEFF375002C0205 /* Wrap.swift in Sources */,
+				525F7E8E1C13057300E3A3A2 /* WrapTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,22 +370,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DD7502761C68FCFC006590AF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DD7502861C68FDDC006590AF /* WrapTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DD7502891C690C7A006590AF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DD75029A1C690CBE006590AF /* WrapTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -501,16 +377,6 @@
 			isa = PBXTargetDependency;
 			target = 52D6D97B1BEFF229002C0205 /* Wrap-iOS */;
 			targetProxy = 52D6D9881BEFF229002C0205 /* PBXContainerItemProxy */;
-		};
-		DD7502811C68FCFC006590AF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 52D6DA0E1BF000BD002C0205 /* Wrap-macOS */;
-			targetProxy = DD7502801C68FCFC006590AF /* PBXContainerItemProxy */;
-		};
-		DD7502941C690C7A006590AF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 52D6D9EF1BEFFFBE002C0205 /* Wrap-tvOS */;
-			targetProxy = DD7502931C690C7A006590AF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -554,12 +420,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -599,10 +464,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -620,12 +484,11 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Configs/Wrap.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Configs/iOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Wrap.Wrap-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.unbox.Wrap-iOS";
 				PRODUCT_NAME = Wrap;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -643,11 +506,11 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Configs/Wrap.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Configs/iOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Wrap.Wrap-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.unbox.Wrap-iOS";
 				PRODUCT_NAME = Wrap;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -659,10 +522,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				INFOPLIST_FILE = Configs/WrapTests.plist;
+				INFOPLIST_FILE = Configs/Tests.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Wrap.Wrap-iOS-Tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.unbox.UnboxTests;
+				PRODUCT_NAME = Wrap;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -672,10 +535,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				INFOPLIST_FILE = Configs/WrapTests.plist;
+				INFOPLIST_FILE = Configs/Tests.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Wrap.Wrap-iOS-Tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.unbox.UnboxTests;
+				PRODUCT_NAME = Wrap;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 			};
@@ -690,10 +553,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Configs/Wrap.plist;
+				INFOPLIST_FILE = Configs/watchOS.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Wrap.Wrap-watchOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.unbox.Unbox-watchOS";
 				PRODUCT_NAME = Wrap;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -712,10 +575,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Configs/Wrap.plist;
+				INFOPLIST_FILE = Configs/watchOS.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Wrap.Wrap-watchOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.unbox.Unbox-watchOS";
 				PRODUCT_NAME = Wrap;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -735,10 +598,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Configs/Wrap.plist;
+				INFOPLIST_FILE = Configs/tvOS.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Wrap.Wrap-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.unbox.Wrap-tvOS";
 				PRODUCT_NAME = Wrap;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -757,10 +620,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Configs/Wrap.plist;
+				INFOPLIST_FILE = Configs/tvOS.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Wrap.Wrap-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.unbox.Wrap-tvOS";
 				PRODUCT_NAME = Wrap;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -782,11 +645,11 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = Configs/Wrap.plist;
+				INFOPLIST_FILE = Configs/OSX.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Wrap.Wrap-macOS";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.unbox.Wrap-OSX";
 				PRODUCT_NAME = Wrap;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -805,74 +668,16 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = Configs/Wrap.plist;
+				INFOPLIST_FILE = Configs/OSX.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Wrap.Wrap-macOS";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.unbox.Wrap-OSX";
 				PRODUCT_NAME = Wrap;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
-			};
-			name = Release;
-		};
-		DD7502831C68FCFC006590AF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "-";
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = Configs/WrapTests.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Wrap.Wrap-macOS-Tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 3.0;
-			};
-			name = Debug;
-		};
-		DD7502841C68FCFC006590AF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "-";
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = Configs/WrapTests.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Wrap.Wrap-macOS-Tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Release;
-		};
-		DD7502961C690C7A006590AF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = Configs/WrapTests.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Wrap.Wrap-tvOS-Tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				SWIFT_VERSION = 3.0;
-				TVOS_DEPLOYMENT_TARGET = 9.1;
-			};
-			name = Debug;
-		};
-		DD7502971C690C7A006590AF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = Configs/WrapTests.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Wrap.Wrap-tvOS-Tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
-				TVOS_DEPLOYMENT_TARGET = 9.1;
 			};
 			name = Release;
 		};
@@ -897,7 +702,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		52D6D9931BEFF229002C0205 /* Build configuration list for PBXNativeTarget "Wrap-iOS Tests" */ = {
+		52D6D9931BEFF229002C0205 /* Build configuration list for PBXNativeTarget "WrapTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				52D6D9941BEFF229002C0205 /* Debug */,
@@ -924,29 +729,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		52D6DA201BF000BD002C0205 /* Build configuration list for PBXNativeTarget "Wrap-macOS" */ = {
+		52D6DA201BF000BD002C0205 /* Build configuration list for PBXNativeTarget "Wrap-OSX" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				52D6DA211BF000BD002C0205 /* Debug */,
 				52D6DA221BF000BD002C0205 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DD7502821C68FCFC006590AF /* Build configuration list for PBXNativeTarget "Wrap-macOS Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DD7502831C68FCFC006590AF /* Debug */,
-				DD7502841C68FCFC006590AF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DD7502951C690C7A006590AF /* Build configuration list for PBXNativeTarget "Wrap-tvOS Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DD7502961C690C7A006590AF /* Debug */,
-				DD7502971C690C7A006590AF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

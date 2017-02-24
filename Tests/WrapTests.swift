@@ -1,30 +1,4 @@
-/**
- *  Wrap
- *
- *  Copyright (c) 2015 - 2017 John Sundell. Licensed under the MIT license, as follows:
- *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
- *
- *  The above copyright notice and this permission notice shall be included in all
- *  copies or substantial portions of the Software.
- *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *  SOFTWARE.
- */
-
-import Foundation
 import XCTest
-import Wrap
 
 // MARK: - Tests
 
@@ -35,7 +9,7 @@ class WrapTests: XCTestCase {
             let int = 15
             let double = 7.6
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "string" : "A string",
@@ -46,14 +20,14 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testOptionalProperties() {
         struct Model {
             let string: String? = "A string"
             let int: Int? = 5
             let missing: String? = nil
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "string" : "A string",
@@ -63,19 +37,19 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testProtocolProperties() {
         struct NestedModel: MockProtocol {
             let constantString = "Another string"
             var mutableInt = 27
         }
-
+        
         struct Model: MockProtocol {
             let constantString = "A string"
             var mutableInt = 15
             let nested: MockProtocol = NestedModel()
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "constantString" : "A string",
@@ -89,16 +63,16 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testRootEnum() {
         enum Enum {
             case first
             case second(String)
         }
-
+        
         do {
             try verify(dictionary: wrap(Enum.first), againstDictionary: [:])
-
+            
             try verify(dictionary: wrap(Enum.second("Hello")), againstDictionary: [
                 "second" : "Hello"
             ])
@@ -106,24 +80,24 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testEnumProperties() {
         enum Enum {
             case first
             case second(String)
             case third(intValue: Int)
         }
-
+        
         enum IntEnum: Int, WrappableEnum {
             case first
             case second = 17
         }
-
+        
         enum StringEnum: String, WrappableEnum {
             case first = "First string"
             case second = "Second string"
         }
-
+        
         struct Model {
             let first = Enum.first
             let second = Enum.second("Hello")
@@ -133,7 +107,7 @@ class WrapTests: XCTestCase {
             let firstString = StringEnum.first
             let secondString = StringEnum.second
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "first" : "first",
@@ -152,21 +126,21 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testDateProperty() {
         let date = Date()
         let nsDate = NSDate()
-
+        
         struct Model {
             let date: Date
             let nsDate: NSDate
         }
-
+        
         let dateFormatter = DateFormatter()
-
+        
         do {
             let model = Model(date: date, nsDate: nsDate)
-
+            
             try verify(dictionary: wrap(model, dateFormatter: dateFormatter), againstDictionary: [
                 "date" : dateFormatter.string(from: date),
                 "nsDate" : dateFormatter.string(from: nsDate as Date)
@@ -176,19 +150,19 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testDatePropertyWithCustomizableStruct() {
         let date = Date()
-
+        
         struct Model: WrapCustomizable {
             let date: Date
         }
-
+        
         let dateFormatter = DateFormatter()
-
+        
         do {
             let model = Model(date: date)
-
+            
             try verify(dictionary: wrap(model, dateFormatter: dateFormatter), againstDictionary: [
                 "date" : dateFormatter.string(from: date)
             ])
@@ -196,29 +170,29 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testEmptyStruct() {
         struct Empty {}
-
+        
         do {
             try verify(dictionary: wrap(Empty()), againstDictionary: [:])
         } catch {
             XCTFail(error.toString())
         }
     }
-
+    
     func testNestedEmptyStruct() {
         struct Empty {}
-
+        
         struct EmptyWithOptional {
             let optional: String? = nil
         }
-
+        
         struct Model {
             let empty = Empty()
             let emptyWithOptional = EmptyWithOptional()
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "empty" : [:],
@@ -228,13 +202,13 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testArrayProperties() {
         struct Model {
             let homogeneous = ["Wrap", "Tests"]
             let mixed = ["Wrap", 15, 8.3] as [Any]
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "homogeneous" : ["Wrap", "Tests"],
@@ -244,14 +218,14 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testDictionaryProperties() {
         struct Model {
             let homogeneous = [
                 "Key1" : "Value1",
                 "Key2" : "Value2"
             ]
-
+            
             let mixed: WrappedDictionary = [
                 "Key1" : 15,
                 "Key2" : 19.2,
@@ -262,7 +236,7 @@ class WrapTests: XCTestCase {
                 ]
             ]
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "homogeneous" : [
@@ -283,13 +257,13 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testSetProperties() {
         struct Model {
             let homogeneous: Set<String> = ["Wrap", "Tests"]
             let mixed: Set<NSObject> = ["Wrap" as NSObject, 15 as NSObject, 8.3 as NSObject]
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "homogeneous" : ["Wrap", "Tests"],
@@ -299,13 +273,13 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testNSURLProperty() {
         struct Model {
             let optionalURL = NSURL(string: "http://github.com")
             let URL = NSURL(string: "http://google.com")!
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "optionalURL" : "http://github.com",
@@ -315,13 +289,13 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testURLProperty() {
         struct Model {
             let optionalUrl = URL(string: "http://github.com")
             let url = URL(string: "http://google.com")!
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "optionalUrl" : "http://github.com",
@@ -331,16 +305,16 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func test64BitIntegerProperties() {
         struct Model {
             let int = Int64.max
             let uint = UInt64.max
         }
-
+        
         do {
             let dictionary = try JSONSerialization.jsonObject(with: wrap(Model()), options: []) as! WrappedDictionary
-
+            
             try verify(dictionary: dictionary, againstDictionary: [
                 "int" : Int64.max,
                 "uint" : UInt64.max
@@ -349,56 +323,56 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testRootSubclass() {
         class Superclass {
             let string1 = "String1"
             let int1 = 1
         }
-
+        
         class Subclass: Superclass {
             let string2 = "String2"
             let int2 = 2
         }
-
+        
         do {
             try verify(dictionary: wrap(Subclass()), againstDictionary: [
                 "string1" : "String1",
                 "string2" : "String2",
                 "int1" : 1,
                 "int2" : 2
-                ])
+            ])
         } catch {
             XCTFail(error.toString())
         }
     }
-
+    
     func testRootNSObjectSubclass() {
         class Model: NSObject {
             let string = "String"
             let double = 7.14
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "string" : "String",
                 "double" : 7.14
-                ])
+            ])
         } catch {
             XCTFail(error.toString())
         }
     }
-
+    
     func testRootDictionary() {
         struct Model {
             var string: String
         }
-
+        
         let dictionary = [
             "model1" : Model(string: "First"),
             "model2" : Model(string: "Second")
         ]
-
+        
         do {
             try verify(dictionary: wrap(dictionary), againstDictionary: [
                 "model1" : [
@@ -412,16 +386,16 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testNestedStruct() {
         struct NestedModel {
             let string = "Nested model"
         }
-
+        
         struct Model {
             let nested = NestedModel()
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "nested" : [
@@ -432,34 +406,34 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testNestedArrayOfStructs() {
         struct NestedModel1 {
             let string1: String
         }
-
+        
         struct NestedModel2 {
             let string2: String
         }
-
+        
         struct Model {
             let nested: [Any] = [
                 NestedModel1(string1: "String1"),
                 NestedModel2(string2: "String2"),
             ]
         }
-
+        
         do {
             let wrapped: WrappedDictionary = try wrap(Model())
-
+            
             if let nested = wrapped["nested"] as? [WrappedDictionary] {
                 XCTAssertEqual(nested.count, 2)
-
+                
                 if let firstDictionary = nested.first, let secondDictionary = nested.last {
                     try verify(dictionary: firstDictionary, againstDictionary: [
                         "string1" : "String1"
                     ])
-
+                    
                     try verify(dictionary: secondDictionary, againstDictionary: [
                         "string2" : "String2"
                     ])
@@ -473,18 +447,18 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testNestedDictionariesOfStructs() {
         struct NestedModel {
             let string = "Hello"
         }
-
+        
         struct Model {
             let nested = [
                 "model" : NestedModel()
             ]
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "nested" : [
@@ -497,21 +471,21 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testNestedSubclass() {
         class Superclass {
             let string1 = "String1"
         }
-
+        
         class Subclass: Superclass {
             let string2 = "String2"
         }
-
+        
         struct Model {
             let superclass = Superclass()
             let subclass = Subclass()
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "superclass" : [
@@ -526,22 +500,22 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testDeepNesting() {
         struct ThirdModel {
             let string = "Third String"
         }
-
+        
         struct SecondModel {
             let string = "Second String"
             let nestedArray = [ThirdModel()]
         }
-
+        
         struct FirstModel {
             let string = "First String"
             let nestedDictionary = [ "nestedDictionary" : SecondModel()]
         }
-
+        
         do {
             let wrappedDictionary :WrappedDictionary = try wrap(FirstModel())
             try verify(dictionary: wrappedDictionary, againstDictionary: [
@@ -559,14 +533,14 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testObjectiveCObjectProperties() {
         struct Model {
             let string = NSString(string: "Hello")
             let number = NSNumber(value: 17)
             let array = NSArray(object: NSString(string: "Unwrap"))
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "string" : "Hello",
@@ -577,24 +551,24 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testWrappableKey() {
         enum Key: Int, WrappableKey {
             case first = 15
             case second = 19
-
+            
             func toWrappedKey() -> String {
                 return String(self.rawValue)
             }
         }
-
+        
         struct Model {
             let dictionary = [
                 Key.first : "First value",
                 Key.second : "Second value"
             ]
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "dictionary" : [
@@ -606,26 +580,26 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testKeyCustomization() {
         struct Model: WrapCustomizable {
             let string = "Default"
             let customized = "I'm customized"
             let skipThis = 15
-
+            
             fileprivate func keyForWrapping(propertyNamed propertyName: String) -> String? {
                 if propertyName == "customized" {
                     return "totallyCustomized"
                 }
-
+                
                 if propertyName == "skipThis" {
                     return nil
                 }
-
+                
                 return propertyName
             }
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "string" : "Default",
@@ -635,18 +609,18 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testCustomWrapping() {
         struct Model: WrapCustomizable {
             let string = "A string"
-
+            
             func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
                 return [
                     "custom" : "A value"
                 ]
             }
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "custom" : "A value"
@@ -655,11 +629,11 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testCustomWrappingCallingWrapFunction() {
         struct Model: WrapCustomizable {
             let int = 27
-
+            
             func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
                 do {
                     var wrapped = try Wrapper().wrap(object: self)
@@ -670,7 +644,7 @@ class WrapTests: XCTestCase {
                 }
             }
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "int" : 27,
@@ -680,22 +654,22 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testCustomWrappingForSingleProperty() {
         struct Model: WrapCustomizable {
             let string = "Hello"
             let int = 16
-
+            
             func wrap(propertyNamed propertyName: String, originalValue: Any, context: Any?, dateFormatter: DateFormatter?) throws -> Any? {
                 if propertyName == "int" {
                     XCTAssertEqual((originalValue as? Int) ?? 0, self.int)
                     return 27
                 }
-
+                
                 return nil
             }
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "string" : "Hello",
@@ -705,14 +679,14 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testCustomWrappingFailureThrows() {
         struct Model: WrapCustomizable {
             func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
                 return nil
             }
         }
-
+        
         do {
             _ = try wrap(Model()) as WrappedDictionary
             XCTFail("Should have thrown")
@@ -722,16 +696,16 @@ class WrapTests: XCTestCase {
             XCTFail("Invalid error type: " + error.toString())
         }
     }
-
+    
     func testCustomWrappingForSinglePropertyFailureThrows() {
         struct Model: WrapCustomizable {
             let string = "A string"
-
+            
             func wrap(propertyNamed propertyName: String, originalValue: Any, context: Any?, dateFormatter: DateFormatter?) throws -> Any? {
                 throw NSError(domain: "ERROR", code: 0, userInfo: nil)
             }
         }
-
+        
         do {
             _ = try wrap(Model()) as WrappedDictionary
             XCTFail("Should have thrown")
@@ -741,7 +715,7 @@ class WrapTests: XCTestCase {
             XCTFail("Invalid error type: " + error.toString())
         }
     }
-
+    
     func testInvalidRootObjectThrows() {
         do {
             _ = try wrap("A string") as WrappedDictionary
@@ -751,22 +725,22 @@ class WrapTests: XCTestCase {
             XCTFail("Invalid error type: " + error.toString())
         }
     }
-
+    
     func testDataWrapping() {
         struct Model {
             let string = "A string"
             let int = 42
             let array = [4, 1, 9]
         }
-
+        
         do {
             let data: Data = try wrap(Model())
             let object = try JSONSerialization.jsonObject(with: data, options: [])
-
+            
             guard let dictionary = object as? WrappedDictionary else {
                 return XCTFail("Invalid encoded type")
             }
-
+            
             try verify(dictionary: dictionary, againstDictionary: [
                 "string" : "A string",
                 "int" : 42,
@@ -776,17 +750,17 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testWrappingArray() {
         struct Model {
             let string: String
         }
-
+        
         do {
             let models = [Model(string: "A"), Model(string: "B"), Model(string: "C")]
             let wrapped: [WrappedDictionary] = try wrap(models)
             XCTAssertEqual(wrapped.count, 3)
-
+            
             try verify(dictionary: wrapped[0], againstDictionary: ["string" : "A"])
             try verify(dictionary: wrapped[1], againstDictionary: ["string" : "B"])
             try verify(dictionary: wrapped[2], againstDictionary: ["string" : "C"])
@@ -794,11 +768,11 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testSnakeCasedKeyWrapping() {
         struct Model: WrapCustomizable {
             var wrapKeyStyle: WrapKeyStyle { return .convertToSnakeCase }
-
+            
             let simple = "simple name"
             let camelCased = "camel cased name"
             let CAPITALIZED = "capitalized name"
@@ -806,7 +780,7 @@ class WrapTests: XCTestCase {
             let center_underscored = "center underscored name"
             let double__underscored = "double underscored name"
         }
-
+        
         do {
             try verify(dictionary: wrap(Model()), againstDictionary: [
                 "simple" : "simple name",
@@ -820,38 +794,40 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testContext() {
         struct NestedModel: WrapCustomizable {
             let string = "String"
-
+            
             func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
                 XCTAssertEqual(context as! String, "Context")
                 return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(object: self)
             }
-
+            
             func wrap(propertyNamed propertyName: String, originalValue: Any, context: Any?, dateFormatter: DateFormatter?) throws -> Any? {
                 XCTAssertEqual(context as! String, "Context")
                 return context
             }
         }
-
-        class Model: WrapCustomizable {
+        
+        class RootModel: WrapCustomizable {
             let string = "String"
             let nestedArray = [NestedModel()]
             let nestedDictionary = ["nested" : NestedModel()]
-
+        }
+        
+        class Model: RootModel {
             func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
                 XCTAssertEqual(context as! String, "Context")
                 return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(object: self)
             }
-
+            
             func wrap(propertyNamed propertyName: String, originalValue: Any, context: Any?, dateFormatter: DateFormatter?) throws -> Any? {
                 XCTAssertEqual(context as! String, "Context")
-                return nil
+                return try super.wrap(propertyNamed: propertyName, originalValue: originalValue, context: context, dateFormatter: dateFormatter)
             }
         }
-
+        
         do {
             try verify(dictionary: wrap(Model(), context: "Context"), againstDictionary: [
                 "string" : "String",
@@ -862,21 +838,21 @@ class WrapTests: XCTestCase {
             XCTFail(error.toString())
         }
     }
-
+    
     func testInheritance() {
         class Superclass {
             let string = "String"
         }
-
+        
         class Subclass: Superclass {
             let int = 22
         }
-
+        
         do {
             try verify(dictionary: wrap(Subclass()), againstDictionary: [
                 "string" : "String",
                 "int" : 22
-                ])
+            ])
         } catch {
             XCTFail(error.toString())
         }
@@ -909,7 +885,7 @@ extension Int: Verifiable {
         guard let number = object as? NSNumber else {
             return nil
         }
-
+        
         return Int(number)
     }
 }
@@ -919,7 +895,7 @@ extension Int64: Verifiable {
         guard let number = object as? NSNumber else {
             return nil
         }
-
+        
         return number.int64Value
     }
 }
@@ -929,7 +905,7 @@ extension UInt64: Verifiable {
         guard let number = object as? NSNumber else {
             return nil
         }
-
+        
         return number.uint64Value
     }
 }
@@ -939,7 +915,7 @@ extension Double: Verifiable {
         guard let number = object as? NSNumber else {
             return nil
         }
-
+        
         return Double(number)
     }
 }
@@ -949,7 +925,7 @@ extension String: Verifiable {
         guard let string = object as? NSString else {
             return nil
         }
-
+        
         return String(string)
     }
 }
@@ -959,7 +935,7 @@ extension Date: Verifiable {
         guard let date = object as? NSDate else {
             return nil
         }
-
+        
         return Date(timeIntervalSinceReferenceDate: date.timeIntervalSinceReferenceDate)
     }
 }
@@ -986,12 +962,12 @@ private func verify(dictionary: WrappedDictionary, againstDictionary expectedDic
     if dictionary.count != expectedDictionary.count {
         throw VerificationError.countMismatch
     }
-
+    
     for (key, expectedValue) in expectedDictionary {
         guard let actualValue = dictionary[key] else {
             throw VerificationError.missingValueForKey(key)
         }
-
+        
         if let expectedNestedDictionary = expectedValue as? WrappedDictionary {
             if let actualNestedDictionary = actualValue as? WrappedDictionary {
                 try verify(dictionary: actualNestedDictionary, againstDictionary: expectedNestedDictionary)
@@ -1000,7 +976,7 @@ private func verify(dictionary: WrappedDictionary, againstDictionary expectedDic
                 throw VerificationError.valueMismatchBetween(actualValue, expectedValue)
             }
         }
-
+        
         if let expectedNestedArray = expectedValue as? [Any] {
             if let actualNestedArray = actualValue as? [Any] {
                 try verify(array: actualNestedArray, againstArray: expectedNestedArray)
@@ -1009,7 +985,7 @@ private func verify(dictionary: WrappedDictionary, againstDictionary expectedDic
                 throw VerificationError.valueMismatchBetween(actualValue, expectedValue)
             }
         }
-
+        
         try verify(value: actualValue, againstValue: expectedValue)
     }
 }
@@ -1018,10 +994,10 @@ private func verify(array: [Any], againstArray expectedArray: [Any]) throws {
     if array.count != expectedArray.count {
         throw VerificationError.countMismatch
     }
-
+    
     for (index, expectedValue) in expectedArray.enumerated() {
         let actualValue = array[index]
-
+        
         if let expectedNestedDictionary = expectedValue as? WrappedDictionary {
             if let actualNestedDictionary = actualValue as? WrappedDictionary {
                 try verify(dictionary: actualNestedDictionary, againstDictionary: expectedNestedDictionary)
@@ -1030,7 +1006,7 @@ private func verify(array: [Any], againstArray expectedArray: [Any]) throws {
                 throw VerificationError.valueMismatchBetween(actualValue, expectedValue)
             }
         }
-
+        
         if let expectedNestedArray = expectedValue as? [Any] {
             if let actualNestedArray = actualValue as? [Any] {
                 try verify(array: actualNestedArray, againstArray: expectedNestedArray)
@@ -1039,7 +1015,7 @@ private func verify(array: [Any], againstArray expectedArray: [Any]) throws {
                 throw VerificationError.valueMismatchBetween(actualValue, expectedValue)
             }
         }
-
+        
         try verify(value: actualValue, againstValue: expectedValue)
     }
 }
@@ -1048,24 +1024,24 @@ private func verify(value: Any, againstValue expectedValue: Any, convertToObject
     guard let expectedVerifiableValue = expectedValue as? Verifiable else {
         throw VerificationError.cannotVerifyValue(expectedValue)
     }
-
+    
     guard let actualVerifiableValue = value as? Verifiable else {
         throw VerificationError.cannotVerifyValue(value)
     }
-
+    
     if actualVerifiableValue.hashValue != expectedVerifiableValue.hashValue {
         if convertToObjectiveCObjectIfNeeded {
             if let objectiveCObject = value as? NSObject {
                 let expectedValueType = type(of: expectedVerifiableValue)
-
+                
                 guard let convertedObject = expectedValueType.convert(objectiveCObject: objectiveCObject) else {
                     throw VerificationError.cannotVerifyValue(value)
                 }
-
+                
                 return try verify(value: convertedObject, againstValue: expectedVerifiableValue, convertToObjectiveCObjectIfNeeded: false)
             }
         }
-
+        
         throw VerificationError.valueMismatchBetween(value, expectedValue)
     }
 }

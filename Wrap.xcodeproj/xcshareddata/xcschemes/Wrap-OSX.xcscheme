@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "52D6D9EF1BEFFFBE002C0205"
+               BlueprintIdentifier = "52D6DA0E1BF000BD002C0205"
                BuildableName = "Wrap.framework"
-               BlueprintName = "Wrap-tvOS"
+               BlueprintName = "Wrap-OSX"
                ReferencedContainer = "container:Wrap.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,9 +42,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "52D6D9EF1BEFFFBE002C0205"
+            BlueprintIdentifier = "52D6DA0E1BF000BD002C0205"
             BuildableName = "Wrap.framework"
-            BlueprintName = "Wrap-tvOS"
+            BlueprintName = "Wrap-OSX"
             ReferencedContainer = "container:Wrap.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -64,9 +64,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "52D6D9EF1BEFFFBE002C0205"
+            BlueprintIdentifier = "52D6DA0E1BF000BD002C0205"
             BuildableName = "Wrap.framework"
-            BlueprintName = "Wrap-tvOS"
+            BlueprintName = "Wrap-OSX"
             ReferencedContainer = "container:Wrap.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -82,9 +82,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "52D6D9EF1BEFFFBE002C0205"
+            BlueprintIdentifier = "52D6DA0E1BF000BD002C0205"
             BuildableName = "Wrap.framework"
-            BlueprintName = "Wrap-tvOS"
+            BlueprintName = "Wrap-OSX"
             ReferencedContainer = "container:Wrap.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

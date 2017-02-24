@@ -4,7 +4,7 @@
  *  For usage, see documentation of the classes/symbols listed in this file, as well
  *  as the guide available at: github.com/johnsundell/wrap
  *
- *  Copyright (c) 2015 - 2017 John Sundell. Licensed under the MIT license, as follows:
+ *  Copyright (c) 2015 John Sundell. Licensed under the MIT license, as follows:
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
