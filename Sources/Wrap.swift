@@ -27,10 +27,6 @@
 
 import Foundation
 
-#if !os(Linux)
-typealias RegularExpression = NSRegularExpression
-#endif
-
 /// Type alias defining what type of Dictionary that Wrap produces
 public typealias WrappedDictionary = [String : Any]
 
@@ -343,8 +339,8 @@ extension NSArray: WrapCustomizable {
     }
 }
 
-/// Extension customizing how NSDictionaries are wrapped
 #if !os(Linux)
+/// Extension customizing how NSDictionaries are wrapped
 extension NSDictionary: WrapCustomizable {
     public func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
         return try? Wrapper(context: context, dateFormatter: dateFormatter).wrap(dictionary: self as [NSObject : AnyObject])
@@ -366,8 +362,8 @@ extension Date: WrappableDate {
     }
 }
 
-/// Extension making NSdate a WrappableDate
 #if !os(Linux)
+/// Extension making NSdate a WrappableDate
 extension NSDate: WrappableDate {
     public func wrap(dateFormatter: DateFormatter) -> String {
         return dateFormatter.string(from: self as Date)
@@ -549,3 +545,9 @@ private extension Wrapper {
         return wrapped
     }
 }
+
+// MARK: - Cross platform compatibility
+
+#if !os(Linux)
+private typealias RegularExpression = NSRegularExpression
+#endif
