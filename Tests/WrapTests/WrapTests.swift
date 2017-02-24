@@ -1025,7 +1025,11 @@ extension String: Verifiable {
             return nil
         }
 
+        #if os(Linux)
+        return nil
+        #else
         return String(string)
+        #endif
     }
 }
 
