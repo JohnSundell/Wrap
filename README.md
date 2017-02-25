@@ -231,12 +231,13 @@ struct Book: WrapCustomizable {
 
 ### Compatibility
 
-Wrap supports all current Apple platforms with the following minimum versions:
+Wrap supports the following platforms:
 
-- iOS 8
-- (mac)OS (X) 10.9
-- watchOS 2
-- tvOS 9
+- iOS 8+
+- macOS 10.9+
+- watchOS 2+
+- tvOS 9+
+- Linux
 
 The current version of Wrap (and the `master` branch) is only compatible with Swift 3 and Xcode 8, however, there’s a [`swift2` branch](https://github.com/JohnSundell/Wrap/tree/swift2) that can be used in apps using Swift 2.3.
 
