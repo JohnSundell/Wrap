@@ -512,7 +512,7 @@ private extension Wrapper {
                     continue
                 }
                 
-                guard let propertyName = property.label, propertyName != "Some" else {
+                guard let propertyName = property.label else {
                     continue
                 }
                 

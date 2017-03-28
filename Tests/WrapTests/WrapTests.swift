@@ -64,6 +64,21 @@ class WrapTests: XCTestCase {
         }
     }
 
+    func testSpecificNonOptionalProperties() {
+        struct Model {
+            let some: String = "value"
+            let Some: Int = 1
+        }
+
+        do {
+            try verify(dictionary: wrap(Model()), againstDictionary: [
+                "some" : "value",
+                "Some" : 1
+                ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
     func testProtocolProperties() {
         struct NestedModel: MockProtocol {
             let constantString = "Another string"
