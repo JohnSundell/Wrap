@@ -52,6 +52,7 @@ class WrapTests: XCTestCase {
             let string: String? = "A string"
             let int: Int? = 5
             let missing: String? = nil
+            let missingNestedOptional: Optional<Optional<String>> = .some(.none)
         }
 
         do {
