@@ -508,7 +508,8 @@ private extension Wrapper {
         
         for mirror in mirrors {
             for property in mirror.children {
-                if "\(property.value)" == "nil" {
+
+                if (property.value as? WrapNillable)?.isNil == true {
                     continue
                 }
                 
@@ -546,6 +547,20 @@ private extension Wrapper {
     }
 }
 
+// MARK: - Nil Handling
+
+private protocol WrapNillable {
+    var isNil: Bool { get }
+}
+
+extension Optional : WrapNillable {
+    var isNil: Bool {
+        if case .none = self {
+            return true
+        }
+        return false
+    }
+}
 // MARK: - Cross platform compatibility
 
 #if !os(Linux)
