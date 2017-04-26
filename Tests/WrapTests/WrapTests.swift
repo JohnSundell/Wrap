@@ -1188,10 +1188,6 @@ private func verify(value: Any, againstValue expectedValue: Any, convertToObject
 
 private extension Error {
     func toString() -> String {
-        if let stringConvertible = self as? CustomStringConvertible {
-            return stringConvertible.description
-        }
-        
-        return "\(self)"
+        return (self as CustomStringConvertible).description
     }
 }
