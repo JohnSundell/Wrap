@@ -30,6 +30,26 @@ import Foundation
 /// Type alias defining what type of Dictionary that Wrap produces
 public typealias WrappedDictionary = [String : Any]
 
+// Extension used to get a JSON formatted description
+extension Dictionary where Key: ExpressibleByStringLiteral, Value: Any {
+    
+    /// A string that represents the contents of the dictionary in JSON syntax
+    public var prettyJsonDescription: String {
+        var prettyDescription = ""
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
+            if let theJsonText = String(data: jsonData, encoding: .ascii) {
+                prettyDescription += theJsonText
+            } else {
+                prettyDescription += "Error converting Data object into String"
+            }
+        } catch {
+            prettyDescription += "Error retrieving Data object: \(error)"
+        }
+        return prettyDescription
+    }
+}
+
 /**
  *  Wrap any object or value, encoding it into a JSON compatible Dictionary
  *
