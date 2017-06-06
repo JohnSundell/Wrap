@@ -1022,7 +1022,7 @@ extension Int: Verifiable {
             return nil
         }
 
-        return Int(number)
+        return number.intValue
     }
 }
 
@@ -1052,7 +1052,7 @@ extension Double: Verifiable {
             return nil
         }
 
-        return Double(number)
+        return number.doubleValue
     }
 }
 
