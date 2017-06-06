@@ -1,10 +1,8 @@
-language: objective-c
-osx_image: xcode8.3
+os: linux
+language: generic
+sudo: required
+dist: trusty
+install:
+    - eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/9f442512a46d7a2af7b850d65a7e9bd31edfb09b/swiftenv-install.sh)"
 script:
-    - xcodebuild clean build -project Wrap.xcodeproj -scheme Wrap-iOS CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
-    - xcodebuild clean build -project Wrap.xcodeproj -scheme Wrap-macOS CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
-    - xcodebuild clean build -project Wrap.xcodeproj -scheme Wrap-watchOS CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
-    - xcodebuild clean build -project Wrap.xcodeproj -scheme Wrap-tvOS CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
-    - xcodebuild clean test -project Wrap.xcodeproj -scheme Wrap-iOS -destination "platform=iOS Simulator,name=iPhone 6" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
-    - xcodebuild clean test -project Wrap.xcodeproj -scheme Wrap-macOS -destination "platform=OS X" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
-    - xcodebuild clean test -project Wrap.xcodeproj -scheme Wrap-tvOS -destination "platform=tvOS Simulator,name=Apple TV 1080p" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+    - swift test
