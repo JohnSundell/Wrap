@@ -143,6 +143,18 @@ public protocol WrapCustomizable {
      *  to be thrown from the main `Wrap()` call that started the process.
      */
     func wrap(propertyName: String, originalValue: Any) throws -> Any?
+    /**
+     *  Override the value of any properties that contains nil values
+     *
+     *  Wrap ignores by default any properties that are nil (reducing the size of the produced JSON).
+     *
+     *  You may implement this function if you want to provide a default value to send.
+     *  If you need the wrapped dictionary to contain the nil value, you may want to return `Optional<Any?>(nil)`.
+     *
+     *  Returning `nil` from this method will cause Wrap to skip the property.
+     */
+    func fallbackValueForProperty(named propertyName: String) -> Any?
+
 }
 
 /// Protocol implemented by types that may be used as keys in a wrapped Dictionary
@@ -207,6 +219,10 @@ public enum WrapError: Error {
 public extension WrapCustomizable {
     func wrap() -> Any? {
         return try? Wrapper().wrap(object: self)
+    }
+    
+    func fallbackValueForProperty(named propertyName: String) -> Any? {
+        return nil
     }
     
     func keyForWrapping(propertyName: String) -> String? {
@@ -420,10 +436,6 @@ private extension Wrapper {
         
         for mirror in mirrors {
             for property in mirror.children {
-                if "\(property.value)" == "nil" {
-                    continue
-                }
-                
                 guard let propertyName = property.label, propertyName != "Some" else {
                     continue
                 }
@@ -437,7 +449,10 @@ private extension Wrapper {
                 }
                 
                 if let wrappingKey = wrappingKey {
-                    if let wrappedProperty = try customizable?.wrap(propertyName: propertyName, originalValue: property.value) {
+                    if "\(property.value)" == "nil", let customizable = customizable {
+                        let fallbackValue = customizable.fallbackValueForProperty(named: propertyName)
+                        wrappedDictionary[wrappingKey] = fallbackValue
+                    } else if let wrappedProperty = try customizable?.wrap(propertyName: propertyName, originalValue: property.value) {
                         wrappedDictionary[wrappingKey] = wrappedProperty
                     } else {
                         wrappedDictionary[wrappingKey] = try self.wrap(value: property.value, propertyName: propertyName)
