@@ -463,7 +463,7 @@ private extension Wrapper {
         return wrappedArray
     }
     
-    func wrap<K: Hashable, V>(dictionary: [K : V]) throws -> WrappedDictionary {
+    func wrap<K, V>(dictionary: [K : V]) throws -> WrappedDictionary {
         var wrappedDictionary = WrappedDictionary()
         let wrapper = Wrapper(context: self.context, dateFormatter: self.dateFormatter)
         
