@@ -57,6 +57,13 @@ Which will produce the following `Dictionary`:
 }
 ```
 
+#### `String` Serialization
+
+```swift
+let data = try wrap(object) as Data
+let string = String(data: data, encoding: .utf8)
+```
+
 ### Advanced example
 
 The first was a pretty simple example, but Wrap can encode even the most complicated structures for you, with both optional, non-optional and custom type values, all without any extra code on your part. Let’s say we have the following model setup:
