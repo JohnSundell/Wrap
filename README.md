@@ -80,8 +80,8 @@ struct SpaceShip {
 }
 
 enum SpaceShipType: Int, WrappableEnum {
-    case Apollo
-    case Sputnik
+    case apollo
+    case sputnik
 }
 
 struct Engine {
@@ -98,7 +98,7 @@ Let’s create an instance of `SpaceShip`:
 
 ```swift
 let ship = SpaceShip(
-    type: .Apollo,
+    type: .apollo,
     weight: 3999.72,
     engine: Engine(
         manufacturer: "The Space Company",
