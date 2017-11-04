@@ -9,9 +9,10 @@
 </p>
 
 <p align="center">
-    <a href="https://travis-ci.org/JohnSundell/Wrap/branches">
-        <img src="https://img.shields.io/travis/JohnSundell/Wrap/master.svg" alt="Travis status" />
+    <a href="https://dashboard.buddybuild.com/apps/5936eda6f22b9400013db5cc/build/latest?branch=master">
+        <img src="https://dashboard.buddybuild.com/api/statusImage?appID=5936eda6f22b9400013db5cc&branch=master&build=latest" alt="BuddyBuild" />
     </a>
+    <img src="https://img.shields.io/badge/Swift-4.0-orange.svg" />
     <a href="https://cocoapods.org/pods/Wrap">
         <img src="https://img.shields.io/cocoapods/v/Wrap.svg" alt="CocoaPods" />
     </a>
