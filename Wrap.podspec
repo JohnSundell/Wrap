@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Wrap"
-  s.version      = "2.1.1"
+  s.version      = "3.0.0"
   s.summary      = "The easy to use Swift JSON encoder"
   s.description  = <<-DESC
   Wrap is an easy to use Swift JSON encoder. Don't spend hours writing JSON encoding code - just wrap it instead!
