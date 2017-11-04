@@ -30,7 +30,7 @@ Using Wrap is as easy as calling `wrap()` on any instance of a `class` or `struc
 
 It also provides a suite of simple but powerful customization APIs that enables you to use it on any model setup with ease.
 
-### Basic example
+## Basic example
 
 Say you have your usual-suspect `User` model:
 
@@ -58,14 +58,7 @@ Which will produce the following `Dictionary`:
 }
 ```
 
-#### `String` Serialization
-
-```swift
-let data = try wrap(object) as Data
-let string = String(data: data, encoding: .utf8)
-```
-
-### Advanced example
+## Advanced example
 
 The first was a pretty simple example, but Wrap can encode even the most complicated structures for you, with both optional, non-optional and custom type values, all without any extra code on your part. Let’s say we have the following model setup:
 
@@ -139,11 +132,11 @@ Which will produce the following dictionary:
 
 As you can see, Wrap automatically encoded the `URL` property to its `absoluteString`, and ignored any properties that were `nil` (reducing the size of the produced JSON).
 
-### Customization
+## Customization
 
 While automation is awesome, customization is just as important. Thankfully, Wrap provides several override points that enables you to easily tweak its default behavior.
 
-#### Customizing keys
+### Customizing keys
 
 Per default Wrap uses the property names of a type as its encoding keys, but sometimes this is not what you’re looking for. You can choose to override any or all of a type’s encoding keys by making it conform to `WrapCustomizable` and implementing `keyForWrapping(propertyNamed:)`, like this:
 
@@ -164,15 +157,15 @@ struct Book: WrapCustomizable {
 
 You can also use the `keyForWrapping(propertyNamed:)` API to skip a property entirely, by returning nil from this method for it.
 
-#### Custom key types
+### Custom key types
 
 You might have nested dictionaries that are not keyed on `Strings`, and for those Wrap provides the `WrappableKey` protocol. This enables you to easily convert any type into a string that can be used as a JSON key.
 
-#### Encoding keys as snake_case
+### Encoding keys as snake_case
 
 If you want the dictionary that Wrap produces to have snake_cased keys rather than the default (which is matching the names of the properties that were encoded), you can easily do so by conforming to `WrapCustomizable` and returning `.convertToSnakeCase` from the `wrapKeyStyle` property. Doing that will, for example, convert the property name `myProperty` into the key `my_property`.
 
-#### Customized wrapping
+### Customized wrapping
 
 For some nested types, you might want to handle the wrapping yourself. This may be especially true for any custom collections, or types that have a completely different representation when encoded. To do that, make a type conform to `WrapCustomizable` and implement `wrap(context:dateFormatter:)`, like this:
 
@@ -186,7 +179,7 @@ struct Library: WrapCustomizable {
 }
 ```
 
-### Enum support
+## Enum support
 
 Wrap also makes it super easy to encode any `enum` values that your types are using. If an `enum` is based on a raw type (such as `String` or `Int`), all you have to do is to declare conformance to `WrappableEnum`, and the rest is taken care of for you.
 
@@ -215,7 +208,7 @@ Encodes into:
 }
 ```
 
-### Contextual objects
+## Contextual objects
 
 To be able to easily encode any dependencies that you might want to use during the encoding process, Wrap provides the ability to supply a contextual object when initiating the wrapping process (by calling `wrap(object, context: myContext`).
 
@@ -237,17 +230,22 @@ struct Book: WrapCustomizable {
 }
 ```
 
-### Compatibility
+## String serialization
+
+```swift
+let data = try wrap(object) as Data
+let string = String(data: data, encoding: .utf8)
+```
+
+## Compatibility
 
 Wrap supports the following platforms:
 
-- iOS 8+
-- macOS 10.9+
-- watchOS 2+
-- tvOS 9+
-- Linux
-
-The current version of Wrap (and the `master` branch) is only compatible with Swift 3 and Xcode 8, however, there’s a [`swift2` branch](https://github.com/JohnSundell/Wrap/tree/swift2) that can be used in apps using Swift 2.3.
+- 📱 iOS 8+
+- 🖥 macOS 10.9+
+- ⌚️ watchOS 2+
+- 📺 tvOS 9+
+- 🐧 Linux
 
 ## Usage
 
