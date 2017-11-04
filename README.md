@@ -249,23 +249,29 @@ Wrap supports the following platforms:
 
 The current version of Wrap (and the `master` branch) is only compatible with Swift 3 and Xcode 8, however, there’s a [`swift2` branch](https://github.com/JohnSundell/Wrap/tree/swift2) that can be used in apps using Swift 2.3.
 
-### Installation
+## Usage
 
-**CocoaPods:**
+Wrap can be easily used in either a Swift script, command line tool or in an app for iOS, macOS, watchOS, tvOS or Linux.
 
-Add the line `pod "Wrap"` to your `Podfile`
+### In an application
 
-**Carthage:**
+Either
 
-Add the line `github "johnsundell/wrap"` to your `Cartfile`
+- Drag the file `Wrap.swift` into your application's Xcode project.
 
-**Manual:**
+or
 
-Clone the repo and drag the file `Wrap.swift` into your Xcode project.
+- Use [CocoaPods](cocoapods.org), [Carthage](https://github.com/Carthage/Carthage) or the [Swift Package Manager](https://github.com/apple/swift-package-manager) to include Wrap as a dependency in your project.
 
-**Swift Package Manager:**
+### In a script
 
-Add the line `.Package(url: "https://github.com/JohnSundell/Wrap.git", majorVersion: 2)` to your `Package.swift` file.
+- Install [Marathon](https://github.com/johnsundell/marathon).
+- Add Wrap using `$ marathon add https://github.com/JohnSundell/Wrap.git`.
+- Run your script using `$ marathon run <path-to-your-script>`.
+
+### In a command line tool
+
+- Drag the file `Wrap.swift` into your command line tool's Xcode project.
 
 ### Hope you enjoy wrapping your objects!
 
