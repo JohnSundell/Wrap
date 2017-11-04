@@ -262,7 +262,7 @@ public extension WrapCustomizable {
     /// Convert a given property name (assumed to be camelCased) to snake_case
     func convertPropertyNameToSnakeCase(propertyName: String) -> String {
         let regex = try! NSRegularExpression(pattern: "(?<=[a-z])([A-Z])|([A-Z])(?=[a-z])", options: [])
-        let range = NSRange(location: 0, length: propertyName.characters.count)
+        let range = NSRange(location: 0, length: propertyName.count)
         let camelCasePropertyName = regex.stringByReplacingMatches(in: propertyName, options: [], range: range, withTemplate: "_$1$2")
         return camelCasePropertyName.lowercased()
     }
