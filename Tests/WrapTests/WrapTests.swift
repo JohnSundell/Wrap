@@ -729,6 +729,33 @@ class WrapTests: XCTestCase {
         }
     }
 
+	func testCustomNilFallbackValue() {
+		struct Model: WrapCustomizable {
+			let string = "A string"
+			let optional1: String? = nil
+			let optional2: Any? = nil
+			
+			fileprivate func fallbackValueForProperty(named propertyName: String) -> Any? {
+				if propertyName == "optional1" {
+					return "null"
+				}
+				else {
+					return 2
+				}
+			}
+		}
+
+		do {
+			try verify(dictionary: wrap(Model()), againstDictionary: [
+				"string" : "A string",
+				"optional1": "null",
+				"optional2": 2
+				])
+		} catch {
+			XCTFail(error.toString() + "")
+		}
+	}
+	
     func testCustomWrappingCallingWrapFunction() {
         struct Model: WrapCustomizable {
             let int = 27
