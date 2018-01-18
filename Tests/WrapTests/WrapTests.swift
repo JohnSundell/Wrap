@@ -65,6 +65,30 @@ class WrapTests: XCTestCase {
         }
     }
 
+    func testOptionalPropertiesWithExplicitlyNull() {
+        struct Model: WrapCustomizable {
+            let string: String? = "A string"
+            let int: Int? = 5
+            let missing: String? = nil
+            let missingNestedOptional: Optional<Optional<String>> = .some(.none)
+
+            var wrapNilStyle: WrapNilStyle {
+                return .explicitlyPutNull
+            }
+        }
+
+        do {
+            try verify(dictionary: wrap(Model()), againstDictionary: [
+                "string" : "A string",
+                "int" : 5,
+                "missing": WrapNull.null,
+                "missingNestedOptional": WrapNull.null
+                ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+
     func testSpecificNonOptionalProperties() {
         struct Model {
             let some: String = "value"
@@ -281,6 +305,34 @@ class WrapTests: XCTestCase {
         }
     }
 
+    func testNestedEmptyStructWithExcplicitNull() {
+        struct Empty {}
+
+        struct EmptyWithOptional: WrapCustomizable {
+            let optional: String? = nil
+
+            var wrapNilStyle: WrapNilStyle {
+                return .explicitlyPutNull
+            }
+        }
+
+        struct Model {
+            let empty = Empty()
+            let emptyWithOptional = EmptyWithOptional()
+        }
+
+        do {
+            try verify(dictionary: wrap(Model()), againstDictionary: [
+                "empty" : [:],
+                "emptyWithOptional" : [
+                        "optional": WrapNull.null
+                    ]
+                ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+
     func testArrayProperties() {
         struct Model {
             let homogeneous = ["Wrap", "Tests"]
@@ -292,6 +344,26 @@ class WrapTests: XCTestCase {
                 "homogeneous" : ["Wrap", "Tests"],
                 "mixed" : ["Wrap", 15, 8.3]
             ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+
+    func testArrayPropertiesExplicitlyNull() {
+        struct Model: WrapCustomizable {
+            let homogeneous = ["Wrap", "Tests"]
+            let mixed = ["Wrap", 15, 8.3, Optional<String>.none] as [Any]
+
+            var wrapNilStyle: WrapNilStyle {
+                return .explicitlyPutNull
+            }
+        }
+
+        do {
+            try verify(dictionary: wrap(Model()), againstDictionary: [
+                "homogeneous" : ["Wrap", "Tests"],
+                "mixed" : ["Wrap", 15, 8.3, WrapNull.null]
+                ])
         } catch {
             XCTFail(error.toString())
         }
@@ -331,6 +403,51 @@ class WrapTests: XCTestCase {
                     ]
                 ]
             ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+
+    func testDictionaryPropertiesExplicitlyNull() {
+        struct Model: WrapCustomizable {
+            let homogeneous = [
+                "Key1" : "Value1",
+                "Key2" : "Value2"
+            ]
+
+            let mixed: WrappedDictionary = [
+                "Key1" : 15,
+                "Key2" : 19.2,
+                "Key3" : "Value",
+                "Key4" : ["Wrap", "Tests"],
+                "Key5" : [
+                    "NestedKey" : "NestedValue"
+                ],
+                "Key6": Optional<String>.none
+            ]
+
+            var wrapNilStyle: WrapNilStyle {
+                return .explicitlyPutNull
+            }
+        }
+
+        do {
+            try verify(dictionary: wrap(Model()), againstDictionary: [
+                "homogeneous" : [
+                    "Key1" : "Value1",
+                    "Key2" : "Value2"
+                ],
+                "mixed" : [
+                    "Key1" : 15,
+                    "Key2" : 19.2,
+                    "Key3" : "Value",
+                    "Key4" : ["Wrap", "Tests"],
+                    "Key5" : [
+                        "NestedKey" : "NestedValue"
+                    ],
+                    "Key6" : WrapNull.null
+                ]
+                ])
         } catch {
             XCTFail(error.toString())
         }
@@ -779,6 +896,35 @@ class WrapTests: XCTestCase {
         }
     }
 
+    func testCustomWrappingForSinglePropertyExplicitlyNull() {
+        struct Model: WrapCustomizable {
+            let string = "Hello"
+            let int = 16
+
+            func wrap(propertyNamed propertyName: String, originalValue: Any, context: Any?, dateFormatter: DateFormatter?) throws -> Any? {
+                if propertyName == "int" {
+                    XCTAssertEqual((originalValue as? Int) ?? 0, self.int)
+                    return 27
+                }
+
+                return nil
+            }
+
+            var wrapNilStyle: WrapNilStyle {
+                return .explicitlyPutNull
+            }
+        }
+
+        do {
+            try verify(dictionary: wrap(Model()), againstDictionary: [
+                "string" : WrapNull.null,
+                "int" : 27
+                ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+
     func testCustomWrappingFailureThrows() {
         struct Model: WrapCustomizable {
             func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
@@ -845,6 +991,37 @@ class WrapTests: XCTestCase {
                 "int" : 42,
                 "array" : [4, 1, 9]
             ])
+        } catch {
+            XCTFail(error.toString())
+        }
+    }
+
+    func testDataWrappingExplicitlyNull() {
+        struct Model: WrapCustomizable {
+            let string = "A string"
+            let int = 42
+            let array = [4, 1, 9]
+            let optional: String? = nil
+
+            var wrapNilStyle: WrapNilStyle {
+                return .explicitlyPutNull
+            }
+        }
+
+        do {
+            let data: Data = try wrap(Model())
+            let object = try JSONSerialization.jsonObject(with: data, options: [])
+
+            guard let dictionary = object as? WrappedDictionary else {
+                return XCTFail("Invalid encoded type")
+            }
+
+            try verify(dictionary: dictionary, againstDictionary: [
+                "string" : "A string",
+                "int" : 42,
+                "array" : [4, 1, 9],
+                "optional": WrapNull.null
+                ])
         } catch {
             XCTFail(error.toString())
         }
@@ -1161,6 +1338,17 @@ private func verify(array: [Any], againstArray expectedArray: [Any]) throws {
 }
 
 private func verify(value: Any, againstValue expectedValue: Any, convertToObjectiveCObjectIfNeeded: Bool = true) throws {
+    // Casting Any to Optional
+    // https://stackoverflow.com/a/32355277/3815843
+    func castToOptional<T>(x: Any) -> T? {
+        return x as? T
+    }
+
+    // First we check special case when nil == WrapNull
+    if expectedValue is WrapNull && castToOptional(x: value) == Optional<String>.none {
+        return
+    }
+
     guard let expectedVerifiableValue = expectedValue as? Verifiable else {
         throw VerificationError.cannotVerifyValue(expectedValue)
     }

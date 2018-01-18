@@ -30,6 +30,14 @@ import Foundation
 /// Type alias defining what type of Dictionary that Wrap produces
 public typealias WrappedDictionary = [String : Any]
 
+/// Type for encoding JSON null value (alternate for NSNull)
+public struct WrapNull {
+    public static let null = WrapNull()
+    private init() {
+
+    }
+}
+
 /**
  *  Wrap any object or value, encoding it into a JSON compatible Dictionary
  *
@@ -113,6 +121,25 @@ public enum WrapKeyStyle {
     case convertToSnakeCase
 }
 
+// Enum describing nil values in a wrapped dictionary
+public enum WrapNilStyle {
+    /// Nil values are just skipped (default)
+    case skipNilValues
+    /// Puts JSON null value when property value is nil
+    /// Example:
+    ///
+    ///     // Swift
+    ///     struct Object {
+    ///             let name: String? = nil
+    ///     }
+    ///     // JSON:
+    ///     {
+    ///         "name": null
+    ///     }
+    ///
+    case explicitlyPutNull
+}
+
 /**
  *  Protocol providing the main customization point for Wrap
  *
@@ -127,6 +154,10 @@ public protocol WrapCustomizable {
      *  implementation of the `keyForWrapping(propertyNamed:)` method.
      */
     var wrapKeyStyle: WrapKeyStyle { get }
+    /**
+     * The style that wrap should ignore nil values or explicitly put JSON null value
+     */
+    var wrapNilStyle: WrapNilStyle { get }
     /**
      *  Override the wrapping process for this type
      *
@@ -237,6 +268,10 @@ public enum WrapError: Error {
 public extension WrapCustomizable {
     var wrapKeyStyle: WrapKeyStyle {
         return .matchPropertyName
+    }
+
+    var wrapNilStyle: WrapNilStyle {
+        return .skipNilValues
     }
     
     func wrap(context: Any?, dateFormatter: DateFormatter?) -> Any? {
@@ -400,6 +435,13 @@ private extension Wrapper {
     
     func wrap<T>(object: T, writingOptions: JSONSerialization.WritingOptions) throws -> Data {
         let dictionary = try self.wrap(object: object, enableCustomizedWrapping: true)
+            .mapValues { value -> Any in
+                if let _ = value as? WrapNull {
+                    return NSNull()
+                }
+
+                return value
+            }
         return try JSONSerialization.data(withJSONObject: dictionary, options: writingOptions)
     }
     
@@ -507,12 +549,21 @@ private extension Wrapper {
         var wrappedDictionary = WrappedDictionary()
         
         for mirror in mirrors {
-            for property in mirror.children {
+            propValueLoop:for property in mirror.children {
 
                 if (property.value as? WrapOptional)?.isNil == true {
-                    continue
+                    if let customizable = customizable {
+                        switch customizable.wrapNilStyle {
+                        case .skipNilValues:
+                            continue propValueLoop
+                        case .explicitlyPutNull:
+                            break
+                        }
+                    } else {
+                        continue propValueLoop
+                    }
                 }
-                
+
                 guard let propertyName = property.label else {
                     continue
                 }
@@ -529,7 +580,16 @@ private extension Wrapper {
                     if let wrappedProperty = try customizable?.wrap(propertyNamed: propertyName, originalValue: property.value, context: self.context, dateFormatter: self.dateFormatter) {
                         wrappedDictionary[wrappingKey] = wrappedProperty
                     } else {
-                        wrappedDictionary[wrappingKey] = try self.wrap(value: property.value, propertyName: propertyName)
+                        if let customizable = customizable {
+                            switch customizable.wrapNilStyle {
+                            case .skipNilValues:
+                                wrappedDictionary[wrappingKey] = try self.wrap(value: property.value, propertyName: propertyName)
+                            case .explicitlyPutNull:
+                                wrappedDictionary[wrappingKey] = WrapNull.null
+                            }
+                        } else {
+                            wrappedDictionary[wrappingKey] = try self.wrap(value: property.value, propertyName: propertyName)
+                        }
                     }
                 }
             }
