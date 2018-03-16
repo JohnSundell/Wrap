@@ -150,6 +150,13 @@ public protocol WrapCustomizable {
      */
     func keyForWrapping(propertyNamed propertyName: String) -> String?
     /**
+     *  Override the return value for property with nil value
+     *
+     *  Returning nil from this method will cause Wrap to use the default
+     *  wrapping mechanism for the property.
+     */
+    func fallbackValueForProperty(propertyNamed propertyName: String) -> Any?
+    /**
      *  Override the wrapping of any property of this type
      *
      *  The original value passed to this method will be the original value that the
@@ -250,6 +257,10 @@ public extension WrapCustomizable {
         case .convertToSnakeCase:
             return self.convertPropertyNameToSnakeCase(propertyName: propertyName)
         }
+    }
+
+    func fallbackValueForProperty(propertyNamed propertyName: String) -> Any? {
+        return nil
     }
     
     func wrap(propertyNamed propertyName: String, originalValue: Any, context: Any?, dateFormatter: DateFormatter?) throws -> Any? {
@@ -508,11 +519,6 @@ private extension Wrapper {
         
         for mirror in mirrors {
             for property in mirror.children {
-
-                if (property.value as? WrapOptional)?.isNil == true {
-                    continue
-                }
-                
                 guard let propertyName = property.label else {
                     continue
                 }
@@ -524,7 +530,14 @@ private extension Wrapper {
                 } else {
                     wrappingKey = propertyName
                 }
-                
+
+                if (property.value as? WrapOptional)?.isNil == true {
+                    if let wrappingKey = wrappingKey, let customizable = customizable {
+                        wrappedDictionary[wrappingKey] = customizable.fallbackValueForProperty(propertyNamed: propertyName)
+                    }
+                    continue
+                }
+
                 if let wrappingKey = wrappingKey {
                     if let wrappedProperty = try customizable?.wrap(propertyNamed: propertyName, originalValue: property.value, context: self.context, dateFormatter: self.dateFormatter) {
                         wrappedDictionary[wrappingKey] = wrappedProperty
