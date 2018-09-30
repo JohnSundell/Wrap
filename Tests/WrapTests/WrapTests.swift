@@ -173,7 +173,9 @@ class WrapTests: XCTestCase {
                     "second" : "Hello"
                 ],
                 "third" : [
-                    "third" : 15
+                    "third" : [
+                        "intValue" : 15
+                    ]
                 ],
                 "firstInt" : 0,
                 "secondInt" : 17,
