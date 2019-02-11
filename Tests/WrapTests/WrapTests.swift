@@ -143,7 +143,7 @@ class WrapTests: XCTestCase {
         enum Enum {
             case first
             case second(String)
-            case third(intValue: Int)
+            case third(Int)
         }
 
         enum IntEnum: Int, WrappableEnum {
@@ -159,7 +159,7 @@ class WrapTests: XCTestCase {
         struct Model {
             let first = Enum.first
             let second = Enum.second("Hello")
-            let third = Enum.third(intValue: 15)
+            let third = Enum.third(15)
             let firstInt = IntEnum.first
             let secondInt = IntEnum.second
             let firstString = StringEnum.first
@@ -358,7 +358,7 @@ class WrapTests: XCTestCase {
     #if !os(Linux)
     func testMixedNSObjectSetProperty() {
         struct Model {
-            let set: Set<NSObject> = ["Wrap" as NSObject, 15 as NSObject, 8.3 as NSObject]
+            let set: [NSObject] = ["Wrap" as NSObject, 15 as NSObject, 8.3 as NSObject]
         }
 
         do {
