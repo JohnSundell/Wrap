@@ -403,18 +403,18 @@ class WrapTests: XCTestCase {
         }
     }
 
-    func test64BitIntegerProperties() {
+    func testIntegerProperties() {
         struct Model {
-            let int = Int64.max
-            let uint = UInt64.max
+            let int = Int.max
+            let uint = UInt.max
         }
 
         do {
             let dictionary = try JSONSerialization.jsonObject(with: wrap(Model()), options: []) as! WrappedDictionary
 
             try verify(dictionary: dictionary, againstDictionary: [
-                "int" : Int64.max,
-                "uint" : UInt64.max
+                "int" : Int.max,
+                "uint" : UInt.max
             ])
         } catch {
             XCTFail(error.localizedDescription)
