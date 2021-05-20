@@ -1,3 +1,9 @@
+⚠️ **DEPRECATED**
+
+Wrap is deprecated in favor of Swift’s built-in `Codable` API and [the Codextended project](https://github.com/JohnSundell/Codextended). All current users are highly encouraged to migrate to `Codable` as soon as possible.
+
+---
+
 <p align="center">
     <img src="logo.png" width="300" max-width="50%" alt="Wrap" />
 </p>
