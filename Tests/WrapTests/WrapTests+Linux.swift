@@ -41,7 +41,7 @@ extension WrapTests {
         ("testHomogeneousSetProperty", testHomogeneousSetProperty),
         ("testNSURLProperty", testNSURLProperty),
         ("testURLProperty", testURLProperty),
-        ("test64BitIntegerProperties", test64BitIntegerProperties),
+        ("testIntegerProperties", testIntegerProperties),
         ("testRootSubclass", testRootSubclass),
         ("testRootNSObjectSubclass", testRootNSObjectSubclass),
         ("testRootDictionary", testRootDictionary),

@@ -43,7 +43,7 @@ class WrapTests: XCTestCase {
                 "double" : 7.6
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -61,7 +61,7 @@ class WrapTests: XCTestCase {
                 "int" : 5
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -77,7 +77,7 @@ class WrapTests: XCTestCase {
                 "Some" : 1
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -91,7 +91,7 @@ class WrapTests: XCTestCase {
                 "string" : "nil"
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -118,7 +118,7 @@ class WrapTests: XCTestCase {
                 ]
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -135,7 +135,7 @@ class WrapTests: XCTestCase {
                 "second" : "Hello"
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -143,7 +143,7 @@ class WrapTests: XCTestCase {
         enum Enum {
             case first
             case second(String)
-            case third(intValue: Int)
+            case third(Int)
         }
 
         enum IntEnum: Int, WrappableEnum {
@@ -159,7 +159,7 @@ class WrapTests: XCTestCase {
         struct Model {
             let first = Enum.first
             let second = Enum.second("Hello")
-            let third = Enum.third(intValue: 15)
+            let third = Enum.third(15)
             let firstInt = IntEnum.first
             let secondInt = IntEnum.second
             let firstString = StringEnum.first
@@ -181,7 +181,7 @@ class WrapTests: XCTestCase {
                 "secondString" : "Second string"
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -202,7 +202,7 @@ class WrapTests: XCTestCase {
             ])
         } catch {
             XCTFail("\(try! wrap(Model(date: date), dateFormatter: dateFormatter) as WrappedDictionary)")
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -224,7 +224,7 @@ class WrapTests: XCTestCase {
             ])
         } catch {
             XCTFail("\(try! wrap(Model(date: date), dateFormatter: dateFormatter) as WrappedDictionary)")
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
     #endif
@@ -245,7 +245,7 @@ class WrapTests: XCTestCase {
                 "date" : dateFormatter.string(from: date)
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -255,7 +255,7 @@ class WrapTests: XCTestCase {
         do {
             try verify(dictionary: wrap(Empty()), againstDictionary: [:])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -277,7 +277,7 @@ class WrapTests: XCTestCase {
                 "emptyWithOptional" : [:]
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -293,7 +293,7 @@ class WrapTests: XCTestCase {
                 "mixed" : ["Wrap", 15, 8.3]
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -332,7 +332,7 @@ class WrapTests: XCTestCase {
                 ]
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -351,14 +351,14 @@ class WrapTests: XCTestCase {
 
             XCTAssertEqual(Set(array), ["Wrap", "Tests"])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
     #if !os(Linux)
     func testMixedNSObjectSetProperty() {
         struct Model {
-            let set: Set<NSObject> = ["Wrap" as NSObject, 15 as NSObject, 8.3 as NSObject]
+            let set: [NSObject] = ["Wrap" as NSObject, 15 as NSObject, 8.3 as NSObject]
         }
 
         do {
@@ -366,7 +366,7 @@ class WrapTests: XCTestCase {
                 "set" : ["Wrap", 15, 8.3]
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
     #endif
@@ -383,7 +383,7 @@ class WrapTests: XCTestCase {
                 "URL" : "http://google.com"
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -399,25 +399,25 @@ class WrapTests: XCTestCase {
                 "url" : "http://google.com"
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
-    func test64BitIntegerProperties() {
+    func testIntegerProperties() {
         struct Model {
-            let int = Int64.max
-            let uint = UInt64.max
+            let int = Int.max
+            let uint = UInt.max
         }
 
         do {
             let dictionary = try JSONSerialization.jsonObject(with: wrap(Model()), options: []) as! WrappedDictionary
 
             try verify(dictionary: dictionary, againstDictionary: [
-                "int" : Int64.max,
-                "uint" : UInt64.max
+                "int" : Int.max,
+                "uint" : UInt.max
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -440,7 +440,7 @@ class WrapTests: XCTestCase {
                 "int2" : 2
                 ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -456,7 +456,7 @@ class WrapTests: XCTestCase {
                 "double" : 7.14
                 ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -480,7 +480,7 @@ class WrapTests: XCTestCase {
                 ]
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -500,7 +500,7 @@ class WrapTests: XCTestCase {
                 ]
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -541,7 +541,7 @@ class WrapTests: XCTestCase {
                 XCTFail("Unexpected type")
             }
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -565,7 +565,7 @@ class WrapTests: XCTestCase {
                 ]
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -594,7 +594,7 @@ class WrapTests: XCTestCase {
                 ]
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -627,7 +627,7 @@ class WrapTests: XCTestCase {
                 ]
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -646,7 +646,7 @@ class WrapTests: XCTestCase {
                 "array" : ["Unwrap"]
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
     #endif
@@ -676,7 +676,7 @@ class WrapTests: XCTestCase {
                 ]
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -705,7 +705,7 @@ class WrapTests: XCTestCase {
                 "totallyCustomized" : "I'm customized"
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -725,7 +725,7 @@ class WrapTests: XCTestCase {
                 "custom" : "A value"
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -750,7 +750,7 @@ class WrapTests: XCTestCase {
                 "custom" : "A value"
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -775,7 +775,7 @@ class WrapTests: XCTestCase {
                 "int" : 27
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -792,7 +792,7 @@ class WrapTests: XCTestCase {
         } catch WrapError.wrappingFailedForObject(let object) {
             XCTAssertTrue(object is Model)
         } catch {
-            XCTFail("Invalid error type: " + error.toString())
+            XCTFail("Invalid error type: " + error.localizedDescription)
         }
     }
 
@@ -811,7 +811,7 @@ class WrapTests: XCTestCase {
         } catch WrapError.wrappingFailedForObject(let object) {
             XCTAssertTrue(object is Model)
         } catch {
-            XCTFail("Invalid error type: " + error.toString())
+            XCTFail("Invalid error type: " + error.localizedDescription)
         }
     }
 
@@ -821,7 +821,7 @@ class WrapTests: XCTestCase {
         } catch WrapError.invalidTopLevelObject(let object) {
             XCTAssertEqual((object as? String) ?? "", "A string")
         } catch {
-            XCTFail("Invalid error type: " + error.toString())
+            XCTFail("Invalid error type: " + error.localizedDescription)
         }
     }
 
@@ -846,7 +846,7 @@ class WrapTests: XCTestCase {
                 "array" : [4, 1, 9]
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -864,7 +864,7 @@ class WrapTests: XCTestCase {
             try verify(dictionary: wrapped[1], againstDictionary: ["string" : "B"])
             try verify(dictionary: wrapped[2], againstDictionary: ["string" : "C"])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -890,7 +890,7 @@ class WrapTests: XCTestCase {
                 "double__underscored" : "double underscored name"
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -932,7 +932,7 @@ class WrapTests: XCTestCase {
                 "nestedDictionary" : ["nested" : ["string" : "Context"]]
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -951,7 +951,7 @@ class WrapTests: XCTestCase {
                 "int" : 22
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 
@@ -972,7 +972,7 @@ class WrapTests: XCTestCase {
                 "stringConvertible" : [:]
             ])
         } catch {
-            XCTFail(error.toString())
+            XCTFail(error.localizedDescription)
         }
     }
 }
@@ -994,8 +994,9 @@ private enum VerificationError: Error {
     case valueMismatchBetween(Any, Any)
 }
 
-extension VerificationError: CustomStringConvertible {
-    var description: String {
+extension VerificationError: LocalizedError {
+    
+    var errorDescription: String? {
         switch self {
         case .arrayCountMismatch(let countA, let countB):
             return "Array count mismatch: \(countA) vs \(countB)"
@@ -1007,6 +1008,12 @@ extension VerificationError: CustomStringConvertible {
             return "Missing expected value for key: \(key)"
         case .valueMismatchBetween(let valueA, let valueB):
             return "Values don't match: \(valueA) vs \(valueB)"
+        }
+    }
+    
+    var localizedDescription: String {
+        get {
+            return errorDescription ?? "missing Error Description!"
         }
     }
 }
@@ -1023,6 +1030,77 @@ extension Int: Verifiable {
         }
 
         return number.intValue
+    }
+}
+
+extension UInt: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> UInt? {
+        guard let number = object as? NSNumber else {
+            return nil
+        }
+        
+        return number.uintValue
+    }
+}
+
+extension Int8: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> Int8? {
+        guard let number = object as? NSNumber else {
+            return nil
+        }
+        
+        return number.int8Value
+    }
+}
+
+extension UInt8: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> UInt8? {
+        guard let number = object as? NSNumber else {
+            return nil
+        }
+        
+        return number.uint8Value
+    }
+}
+
+extension Int16: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> Int16? {
+        guard let number = object as? NSNumber else {
+            return nil
+        }
+        
+        return number.int16Value
+    }
+}
+
+extension UInt16: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> UInt16? {
+        guard let number = object as? NSNumber else {
+            return nil
+        }
+        
+        return number.uint16Value
+    }
+}
+
+
+extension Int32: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> Int32? {
+        guard let number = object as? NSNumber else {
+            return nil
+        }
+        
+        return number.int32Value
+    }
+}
+
+extension UInt32: Verifiable {
+    fileprivate static func convert(objectiveCObject object: NSObject) -> UInt32? {
+        guard let number = object as? NSNumber else {
+            return nil
+        }
+        
+        return number.uint32Value
     }
 }
 
@@ -1183,11 +1261,5 @@ private func verify(value: Any, againstValue expectedValue: Any, convertToObject
         }
 
         throw VerificationError.valueMismatchBetween(value, expectedValue)
-    }
-}
-
-private extension Error {
-    func toString() -> String {
-        return "\(self)"
     }
 }
